@@ -41,6 +41,7 @@ outputdir <- "/home/leecb/Documentos/UNESP/artigos/ms_Rogeri_etal_indidivual_spe
 # Change to the folder where he code is located
 setwd(codedir)
 source("plot_google_2_1_source_code.R")
+source("spatis_source_code.R")
 
 # Loading data
 # Change to the data folder
@@ -553,59 +554,52 @@ write.table(area.use.vals, "area_of_use_vals.txt", sep = "\t", row.names = F, co
 # Calculating the spatial use overlap
 # SpatIS - Spatial individual specialization
 
-# This is a matrix with the overlap of utilization distribution between each pair of individuals
-# and each individual and the whole population
-over <- kerneloverlap(spdados.ud[,1], grid = 200, extent = 1.5, method = "VI")
+calculated.spatis <- SpatIS(spdados.ud, individuals.col = "ID", population.ID = "all", grid = 200, extent = 1.5)
 
-# Line in which the population is placed
-population.line <- which(rownames(over) == "all")
-
-# Overlap of each individual with the whole population utilization distribution
-SpatpIS.ind.aux <- over[-population.line,population.line]
-# SpatIS for individuals = 1 - overlap of the individual with the population
-SpatpIS.ind <- 1 - SpatpIS.ind.aux
-# SpatIS = average of individual SpatIS
-SpatIS_real <- mean(SpatpIS.ind)
+# Individual SpatIS
+SpatIS.ind <- calculated.spatis$SpatIS.individual
+# Population SpatIS
+SpatIS.pop <- calculated.spatis$SpatIS.population
 
 # Export individual SpatIS
 # setwd(outputdir)
 # write.table(SpatpIS.ind, "individual_spatis.csv", sep = "\t", row.names = F, col.names = T)
 
 # Bootstrap - mixing points to assess if SpatIS is significantly greater than zero
-naleat <- 100
-SpatIS_aleat <- c()
-for(i in 1:naleat)
-{
-  print(i)
-  spdados2 <- spdados.ud[,1][spdados$ID != "all",]
-  indivs <- sample(spdados2$ID)
-  spdados2$ID <- indivs
-  
-  pop <- spdados2
-  pop$ID <- "all"
-  spdados2 <- rbind(spdados2, pop)
-  
-  over <- kerneloverlap(spdados2[,1], grid = 100, extent = 1.5, method = "VI")
-  # Overlap of each individual with the whole population utilization distribution
-  SpatpIS.ind.aux <- over[-population.line,population.line]
-  # Individual SpatIS = 1 - overlap of the individual with the population
-  SpatpIS.ind <- 1 - SpatpIS.ind.aux
-  # Population SpatIS = average of individual SpatIS
-  SpatIS <- mean(SpatpIS.ind)
-  SpatIS_aleat <- c(SpatIS_aleat, SpatIS)
-}
+randomized <- SpatIS_bootstrap(calculated.spatis, permutations = 999)
+
+# Doing it manually
+# naleat <- 100
+# SpatIS_aleat <- c()
+# for(i in 1:naleat)
+# {
+#   print(i)
+#   spdados2 <- spdados.ud[,1][spdados$ID != "all",]
+#   indivs <- sample(spdados2$ID)
+#   spdados2$ID <- indivs
+#   
+#   pop <- spdados2
+#   pop$ID <- "all"
+#   spdados2 <- rbind(spdados2, pop)
+#   
+#   over <- kerneloverlap(spdados2[,1], grid = 100, extent = 1.5, method = "VI")
+#   # Overlap of each individual with the whole population utilization distribution
+#   SpatIS.ind.aux <- over[-population.line,population.line]
+#   # Individual SpatIS = 1 - overlap of the individual with the population
+#   SpatIS.ind <- 1 - SpatIS.ind.aux
+#   # Population SpatIS = average of individual SpatIS
+#   SpatIS <- mean(SpatIS.ind)
+#   SpatIS_aleat <- c(SpatIS_aleat, SpatIS)
+# }
 
 # P-value
-(p <- sum(SpatIS_real <= SpatIS_aleat)/naleat) # proportion of random values that are greater than the observed value
-hist(SpatIS_aleat, main = "", xlab = "Spatial Individual Specialization", ylab = "Frequency",
-     xlim = c(min(SpatIS_aleat), SpatIS_real))
-abline(v = SpatIS_real, col = "red")
+(p <- randomized$p)
 
 
 # Bootstrap - mixing points to assess if SpatIS is significantly greater than zero
 #             while keeping the roofing points
-naleat <- 200
-SpatIS_aleat_center <- c()
+naleat <- 999
+SpatIS_aleat_center <- SpatIS.pop
 for(i in 1:naleat)
 {
   print(i)
@@ -626,16 +620,16 @@ for(i in 1:naleat)
   
   over <- kerneloverlap(spdados2[,1], grid = 100, extent = 1.5, method = "VI")
   # Overlap of each individual with the whole population utilization distribution
-  SpatpIS.ind.aux <- over[-population.line,population.line]
+  SpatIS.ind.aux <- over[-population.line,population.line]
   # Individual SpatIS = 1 - overlap of the individual with the population
-  SpatpIS.ind <- 1 - SpatpIS.ind.aux
+  SpatIS.ind <- 1 - SpatIS.ind.aux
   # Population SpatIS = average of individual SpatIS
-  SpatIS <- mean(SpatpIS.ind)
+  SpatIS <- mean(SpatIS.ind)
   SpatIS_aleat_center <- c(SpatIS_aleat_center, SpatIS)
 }
 
 # P-value
-(p <- sum(SpatIS_real <= SpatIS_aleat_center)/naleat) # proportion of random values that are greater than the observed value
+(p <- sum(SpatIS_real <= SpatIS_aleat_center)/(naleat+1)) # proportion of random values that are greater than the observed value
 hist(SpatIS_aleat_center, main = "", xlab = "Spatial Individual Specialization", ylab = "Frequency",
      xlim = c(min(SpatIS_aleat_center), SpatIS_real))
 abline(v = SpatIS_real, col = "red")
@@ -657,6 +651,7 @@ dev.off()
 setwd(outputdir)
 
 png("Fig_results.png", width = 20, height = 10, units = "cm", res = 300)
+tiff("Fig_results.tif", width = 20, height = 10, units = "cm", res = 300)
 par(mfrow = c(1,2), mar = c(0, 0, 0, 0))
 
 # Figure A - network
