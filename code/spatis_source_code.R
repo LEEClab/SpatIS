@@ -117,7 +117,7 @@ SpatIS <- function(data, individuals.col, population.ID = NULL,
   # List of parameters
   parms <- list(individuals.col = individuals.col, population.ID = population.ID, method = method, percent = percent, ...)
   
-  return( list(data = data2, parms = parms, SpatIS.individual = SpatIS.ind, SpatIS.population = SpatIS.pop) )
+  return( list(data = data.aux, parms = parms, SpatIS.individual = SpatIS.ind, SpatIS.population = SpatIS.pop) )
 }
 
 
