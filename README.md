@@ -12,7 +12,7 @@ Kerches-Rogeri, P.; Niebuhr, B. B. S.; Muylaert, R. L., Mello, M. A. R. Individu
 
 ## Contact
 
-If you have any questions or suggestions, do not hesitate to contact us.
+If you have questions or suggestions, do not hesitate to contact us:
 + Patricia Kerches-Rogeri <<parogeri@gmail.com>>  
 + Bernardo B. S. Niebuhr <<bernardo_brandaum@yahoo.com.br>>  
 + Renara L. Muylaert <<renatamuy@gmail.com>>  
