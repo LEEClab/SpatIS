@@ -6,4 +6,4 @@ We present here the source code for running SpatIS using movement data of indivi
 
 If you use *SpatIS*, please refer to
 
-Rogeri, P. K.; Niebuhr, B. B. S.; Muylaert, R. L., Mello, M. A. R. Individual specialization in the space use of frugivorous bats. *In prep.*
+Kerches-Rogeri, P.; Niebuhr, B. B. S.; Muylaert, R. L., Mello, M. A. R. Individual specialization in the space use of frugivorous bats. *In prep.*
