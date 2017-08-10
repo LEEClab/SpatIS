@@ -2,7 +2,7 @@
 ## PLOT GOOGLE 2.1									##
 ## Script for Plotting Animal Movement Data over GoogleMaps Imagery	## 
 ## Google Earth Image									##
-## by Carlos Andr? Zucco - September/2014 - cazucco14@gmail.com		##
+## by Carlos Andre Zucco - September/2014 - cazucco14@gmail.com		##
 ## creatively based on previous work of Luiz Gustavo Oliveira-Santos	##
 ## No rights reserved. Feel free to modify and share				##
 ##########################################################################

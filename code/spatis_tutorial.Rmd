@@ -1,7 +1,7 @@
 ---
 title: 'SpatIS tutorial: Spatial Individual Specialization Index'
-author: "Bernardo B. S. Niebuhr"
-date: "July 2017"
+author: Appendix 1. Kerches-Rogeri, P.; Niebuhr, B. B. S.; Muylaert, R. L., Mello,
+  M. A. R. Individual specialization in the space use of frugivorous bats. In prep.
 output: html_document
 ---
 
@@ -11,9 +11,9 @@ Individuals are naturally different and heterogeneous within populations. These 
 
 In this context, the niche is generally represented by the type and amount of food items or other resources that are consumed by individuals. As resources are heterogeneously distributed in space in different habitats, it is expected that individual specialization leaves its shadow over space, or even that different environments or space itself may be viewed as resources, so that individuals may be more or less specialists regarding their movement patterns, habitat selection, and use of space.
 
-Here we describe  to calculate the Spatial Individual Specialization index (SpatIS) 
+Here we describe how to calculate the Spatial Individual Specialization index (SpatIS) 
 
-Here we describe the procedures to calculate the Spatial Individual Specialization index (*SpatIS*) using the R function `SpatIS`, based on movement data of individuals of the same population. We also use the function `SpatIS_bootstrap` to check if the SpatIS for a population is significant, i.e., different from what it would be expected at random, if (at least some of) individuals were not specialists in their use of space. To that end, first we simulate a virtual landscape with some different resources located heterogeously in space. Then we simulate five individuals that present preferences for different types of resources, which is reflected in their movement patterns. Finally we calculate *SpatIS* and run `SpatIS_bootstrap` for this simulated population.
+Here we describe the procedures to calculate the Spatial Individual Specialization index (*SpatIS*) using the R function `SpatIS`, based on movement data of individuals of the same population. We also use the function `SpatIS_randomize` to check if the SpatIS for a population is significant, i.e., different from what it would be expected at random, if (at least some of) individuals were not specialists in their use of space. To that end, first we simulate a virtual landscape with some different resources located heterogeously in space. Then we simulate five individuals that present preferences for different types of resources, which is reflected in their movement patterns. Finally we calculate *SpatIS* and run `SpatIS_randomize` for this simulated population.
 
 # Simulating space and individuals
 
@@ -30,10 +30,14 @@ radius <- c(10, 5, 8, 10, 5)
 
 # Draw landscape with prefered resources
 cols <- grey.colors(length(x.resources), alpha = 0.5) # colors for each resource
-matplot(x.resources, y.resources, type="n", xlim=c(1.2*min(x.resources),1.2*max(x.resources)),
-        ylim=c(1.2*min(y.resources),1.2*max(y.resources)), xlab = "X", ylab = "Y") # draw a landscape that encompasses the position of all resources
+# draw a landscape that encompasses the position of all resources
+matplot(x.resources, y.resources, type="n", 
+        xlim=c(1.2*min(x.resources),1.2*max(x.resources)),
+        ylim=c(1.2*min(y.resources),1.2*max(y.resources)), 
+        xlab = "X", ylab = "Y") 
 for(i in 1:length(x.resources)) {
-  draw.circle(x.resources[i], y.resources[i], radius = radius[i], border = cols[i], col = cols[i]) # draw resources
+  draw.circle(x.resources[i], y.resources[i], radius = radius[i], border = cols[i], 
+              col = cols[i]) # draw resources
 }
 ```
 
@@ -49,7 +53,9 @@ library(circular)
 set.seed(122)
 
 # Random walk parameters
-beta <- c(1.5, 2, 1.8, 2.2, 0.1) # Coefficient of attraction or bias - positive values correspond to attraction, negative values correspond to avoidance
+# Coefficient of attraction or bias - positive values correspond to attraction, 
+#   negative values correspond to avoidance
+beta <- c(1.5, 2, 1.8, 2.2, 0.1) 
 rho <- 0.6 # Concentration parameter around the bias absolute angle
 scale <- 1 # Scale of the Weibull distribution for step length
 shape <- 1 # Shape of the Weibull distribution for step length
@@ -100,7 +106,8 @@ for(i in 1:ntracks){
 # Draw landscape with prefered resources
 matplot(X,Y, type="n", xlim=c(1.4*min(X),1.4*max(X)), ylim=c(1.4*min(Y),1.4*max(Y)))
 for(i in 1:length(x.resources)) {
-  draw.circle(x.resources[i], y.resources[i], radius = radius[i], border = cols[i], col = cols[i])
+  draw.circle(x.resources[i], y.resources[i], radius = radius[i], border = cols[i], 
+              col = cols[i])
 }
 
 # Plot individual trajectories
@@ -123,21 +130,34 @@ codedir <- "/home/leecb/Github/SpatIS/code/"
 source(paste(codedir, "spatis_source_code.R", sep = ""))
 ```
 
-Then it is necessary to transform individuals' locations into a SpatialPointsDataFrame (basically a data frame with spatial information embedded; take a look [here](https://cran.r-project.org/web/packages/sp/vignettes/intro_sp.pdf) for more information), so that one of the columns indicates the individual ID. Then, it easy to run `SpatIS` with this SpatialPointsDataFrame as input by specifying which column corresponds to individual ID. `SpatIS` is based on `kerneloverlap` function from [adehabitatHR package](https://cran.r-project.org/web/packages/adehabitatHR/vignettes/adehabitatHR.pdf) and calculates the overlap in the utilization distribution (using any of the methods of `kerneloverlap` function, look [here](https://www.rdocumentation.org/packages/adehabitatHR/versions/0.4.14/topics/kerneloverlap) for more details) between individuals and the whole population (assumed to be the combination of all individuals sampled).
+Then it is necessary to transform individuals' locations into a SpatialPointsDataFrame (basically a data frame with spatial information embedded; take a look [here](https://cran.r-project.org/web/packages/sp/vignettes/intro_sp.pdf) for more information), so that one of the columns indicates the individual ID. Below we show an example of how the space use data may be organized and how it looks like after the transformation into a SpatialPointsDataFrame.
 
-There are two options for calling `SpatIS`. One is to create in the input SpatialPointsDataFrame a "new individual" that represents the population, with locations of all individuals gathered, and pass the "population ID" as one of the arguments when calling `SpatIS`. The other one is to let the function do it for you, if you have not done it yet (in this case, the option `population.ID` should be set to `NULL`). As we still do not have the locations and an ID that represents all the population, we are going to run the second (and easiest) option. We put the results into an object called `observed.SpatIS`.
-
-```{r run_spatis}
-# Organizing individual locations into a SpatialPointsDataFrame
+```{r organize_data}
+# Organizing individual locations as an example of tabular data
 ids <- sapply(1:ncol(X), rep, times = nrow(X)) # Generating array of IDs
 ids.vector <- as.vector(ids)
 X.vector <- as.vector(X) # Array of x positions
 Y.vector <- as.vector(Y) # Array of y positions
 
-# Creating SpatialPointsDataFrame with an ID column that represents individuals
-data <- data.frame(ID = ids.vector)
-spdata <- SpatialPointsDataFrame(coords = cbind(X.vector, Y.vector), data = data)
+# Creating a data frame with an ID column that represents individuals
+data <- data.frame(ID = ids.vector, X = X.vector, Y = Y.vector)
 
+# This is how the original data may look like
+head(data)
+
+# Transforming the original data into a SpatialPointsDataFrame
+spdata <- SpatialPointsDataFrame(coords = cbind(data$X, data$Y), 
+                                 data = subset(data, select = -c(X,Y)))
+
+# This is how the SpatialPointsDataFrame will look like
+head(spdata)
+```
+
+After transforming the original data, it easy to run `SpatIS` with this SpatialPointsDataFrame as input by specifying which column corresponds to individual ID. `SpatIS` is based on `kerneloverlap` function from [adehabitatHR package](https://cran.r-project.org/web/packages/adehabitatHR/vignettes/adehabitatHR.pdf) and calculates the overlap in the utilization distribution (using any of the methods of `kerneloverlap` function, look [here](https://www.rdocumentation.org/packages/adehabitatHR/versions/0.4.14/topics/kerneloverlap) for more details) between individuals and the whole population (assumed to be the combination of all individuals sampled).
+
+There are two options for calling `SpatIS`. One is to create in the input SpatialPointsDataFrame a "new individual" that represents the population, with locations of all individuals gathered, and pass the "population ID" as one of the arguments when calling `SpatIS`. The other one is to let the function do it for you, if you have not done it yet (in this case, the option `population.ID` should be set to `NULL`). As we still do not have the locations and an ID that represents all the population, we are going to run the second (and easiest) option. We put the results into an object called `observed.SpatIS`.
+
+```{r run_spatis}
 # Reploting data
 # cor <- rainbow(length(unique(spdata$ID)))
 # plot(coordinates(spdata)[,1], coordinates(spdata)[,2], type = "n")
@@ -202,9 +222,15 @@ for(i in (1:length(ids))) {
   kernel95 <- adehabitatHR::getverticeshr(UDs[[i]], percent = 95)
   if(i == 1){
     # Draw the virtual landscape
-    matplot(x.resources, y.resources, type="n", xlim=c(1.2*min(x.resources), 1.2*max(x.resources)), ylim=c(1.2*min(y.resources),1.2*max(y.resources)), xlab = "X", ylab = "Y") # draw a landscape that emcompasses the position of all resources
+    
+    # draw a landscape that emcompasses the position of all resources
+    matplot(x.resources, y.resources, type="n", 
+            xlim=c(1.2*min(x.resources), 1.2*max(x.resources)),
+            ylim=c(1.2*min(y.resources),1.2*max(y.resources)), 
+            xlab = "X", ylab = "Y") 
     for(j in 1:length(x.resources)) {
-      draw.circle(x.resources[j], y.resources[j], radius = radius[j], border = cols[j], col = cols[j]) # draw resources
+      draw.circle(x.resources[j], y.resources[j], radius = radius[j], border = cols[j], 
+                  col = cols[j]) # draw resources
     }
   }
   plot(kernel95, border=colors[i], lwd = 2, add = T)
@@ -213,22 +239,22 @@ for(i in (1:length(ids))) {
 
 # Calculating population SpatIS significance
 
-To check whether the population SpatIS observed is different from random, we use the function `SpatIS_bootstrap`. This function recalculates the population SpatIS value after permutating the population locations between individuals. This permutation procedure is repeated a number of times (the default is `permutations = 99`) and used to calculated significance (a *p* value) as the number of times a random calculated population SpatIS is equal or greater than the observed one. The input used for running `SpatIS_bootstrap` is the list that result from `SpatIS` function. The function also plots (if `plot = TRUE`) how far is the observed value (in red) from permutated ones.
+To check whether the population SpatIS observed is different from random, we use the function `SpatIS_randomize`. This function recalculates the population SpatIS value after randomizing the population locations between individuals. This randomization procedure is repeated a number of times (the default is `iterations = 99`) and used to calculated significance (a *p* value) as the number of times a random calculated population SpatIS is equal or greater than the observed one. The randomization process may be a bootstrap (randomize locations with replacement) or a permutation procedure (without replacement; this option is controled by the argument `bootstrap`). The input used for running `SpatIS_randomize` is the list that result from `SpatIS` function. The function also plots (if `plot = TRUE`) how far is the observed value (in red) from permutated ones.
 
 The output is a list with the random SpatIS values, the observed SpatIS calculated through `SpatIS` function, and the significance (*p*) value.
 
-```{r spatis_permutation, results = 'hide', fig.align = 'center', fig.asp = 1}
+```{r spatis_randomize, results = 'hide', fig.align = 'center', fig.asp = 1}
 # Run permutation
-permutations <- SpatIS_bootstrap(observed.SpatIS, permutations = 99)
+permutations <- SpatIS_randomize(observed.SpatIS, iterations = 99)
 ```
 
-```{r spatis_permutation2}
+```{r spatis_randomize2}
 # Show permutation results
 permutations
 ```
 
 # Citation
 
-If you use *SpatIS*, please refer to
+If you need more information or use *SpatIS*, please refer to
 
-Rogeri, P. K.; Niebuhr, B. B. S.; Muylaert, R. L., Mello, M. A. R. Individual specialization in the space use of frugivorous bats. *In prep.*
+Kerches-Rogeri, P.; Niebuhr, B. B. S.; Muylaert, R. L., Mello, M. A. R. Individual specialization in the space use of frugivorous bats. *In prep.*

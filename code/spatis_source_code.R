@@ -4,7 +4,7 @@
 # 
 # Patricia K. Rogeri - pa_bio04@yahoo.com.br
 # Bernardo B. S. Niebuhr - bernardo_brandaum@yahoo.com.br
-# Renata L. Muylaert - remuylaert@gmail.com
+# Renata L. Muylaert - renatamuy@gmail.com 
 #
 # Function SpatIS, to calculate Individual Specializations considering the use 
 #   of space. The functional calculates utilization distributions (UD) for both 
@@ -34,7 +34,7 @@
 #
 # method:          method of overlap between utilization distributions (the same
 #                  options as the function kerneloverlap from adehabitatHR 
-#                  package. See ?kerneloverlap for more information). The dafault
+#                  package. See ?kerneloverlap for more information). The default
 #                  is "VI", which computes the volume of the intersection between 
 #                  the individual and populational UD.
 # 
@@ -55,7 +55,7 @@
 #                    each individual and the population UDs).
 #
 # SpatIS.population: a value of Spatial individual specialization for the population,
-#                    calculated as the average of all SpatIS.individual values.
+#                    calculated as the average of all SpatIS individual values.
 #
 # July 2017
 ################################################################################
@@ -67,8 +67,7 @@ if(!require(rgdal)) install.packages("rgdal", dep=T); library(rgdal)
 
 # Function SpatIS declaration
 SpatIS <- function(data, individuals.col, population.ID = NULL, 
-                   method = c("VI", "HR", "PHR", "BA", "UDOI", "HD"),
-                   percent = 95, ...)
+                   method = c("VI", "HR", "PHR", "BA", "UDOI", "HD"), ...)
 {
   # Check if the data are of the class SpatialPoints
   if (!inherits(data, "SpatialPoints")) 
@@ -115,7 +114,7 @@ SpatIS <- function(data, individuals.col, population.ID = NULL,
   SpatIS.pop <- mean(SpatIS.ind)
   
   # List of parameters
-  parms <- list(individuals.col = individuals.col, population.ID = population.ID, method = method, percent = percent, ...)
+  parms <- list(individuals.col = individuals.col, population.ID = population.ID, method = method, ...)
   
   return( list(data = data.aux, parms = parms, SpatIS.individual = SpatIS.ind, SpatIS.population = SpatIS.pop) )
 }
@@ -127,28 +126,34 @@ SpatIS <- function(data, individuals.col, population.ID = NULL,
 # 
 # Patricia K. Rogeri - pa_bio04@yahoo.com.br
 # Bernardo B. S. Niebuhr - bernardo_brandaum@yahoo.com.br
-# Renata L. Muylaert - remuylaert@gmail.com
+# Renata L. Muylaert - renatamuyt@gmail.com
 #
-# Function SpatIS_bootstrap, to randomize the locations of individuals, calculate
-#   their utilization distributions, calculate SpatIS numerous times using a
+# Function SpatIS_randomize, to randomize the locations of individuals, calculate
+#   their utilization distributions, calculate SpatIS for numerous times using a
 #   bootstrap procedure and compare the randomized SpatIS with the observed one.
 #   This frunction may be used to calculate whether the oserved SpatIS in 
 #   different from a random SpatIS value (a comparison with the null model).
 #
-# Call: SpatIS_bootstrap(SpatIS.object, permutations = 99, plot = TRUE)
+# Call: SpatIS_randomize(SpatIS.object, iterations = 99, bootstrap = TRUE, plot = TRUE)
 #
 # Inputs:
-# data:         The output of SpatIS function, a list which contains:
-#               1) the original data points used, for individuals and
-#               the whole population; 2) the list of parameters used as input
-#               to SpatIS function; 3) the observed individual SpatIS values; 
-#               and 4) the observed population SpatIS value.
+# data:       The output of SpatIS function, a list containing:
+#             1) the original data points used, for individuals and
+#             the whole population; 2) the list of parameters used as input
+#             to SpatIS function; 3) the observed individual SpatIS values; 
+#             and 4) the observed population SpatIS value.
 #
-# permutations: Number of permutations to be performed for assessing significance
-#               of the population SpatIS.
+# iterations: Number of iterations to be performed for assessing significance
+#             of the population SpatIS.
 #
-# plot:         Whether or not to plot the comparison between observed and 
-#               randomized population SpatIS values.
+# bootstrap:  logical. If TRUE, each individual location may be selected more than once
+#             in the randomization process, and some of the real locations may not be
+#             selected in a given iteration (bootstrap process). If FALSE (Default), 
+#             there is no replacement in the randomization of locations, so individual
+#             locations are permutated instead of bootstraped (permutation process).
+#
+# plot:       Whether or not to plot the comparison between observed and 
+#             randomized population SpatIS values.
 #
 # Output:
 # A list of three elements:
@@ -158,7 +163,7 @@ SpatIS <- function(data, individuals.col, population.ID = NULL,
 #
 # SpatIS.population.observed: the observed population SpatIS (used as input).
 #
-# p:                          the p-value which represents the significance. It 
+# p:                          the p-value which represents the one-tailed significance. It 
 #                             answers the question: how many times randomized 
 #                             individual locations present a population SpatIS
 #                             value equal or greater than the observed value?
@@ -166,8 +171,8 @@ SpatIS <- function(data, individuals.col, population.ID = NULL,
 # July 2017
 ################################################################################
 
-# Function SpatIS_bootstrap declaration
-SpatIS_bootstrap <- function(SpatIS.object, permutations = 99, plot = TRUE)
+# Function SpatIS_randomize declaration
+SpatIS_randomize <- function(SpatIS.object, iterations = 99, bootstrap = TRUE, plot = TRUE)
 {
   # Check if the observed SpatIS was correctly calculated
   type <- class(SpatIS.object)
@@ -190,13 +195,18 @@ SpatIS_bootstrap <- function(SpatIS.object, permutations = 99, plot = TRUE)
   SpatIS.pop.random <- SpatIS.pop
   
   # Generate one randomized SpatIS value per permutation
-  for(i in 1:permutations)
+  for(i in 1:iterations)
   {
     print(paste('Iteration =', i))
     
     # Remove population IDs and randomize individual IDs
     data2 <- data[,parms$individuals.col][data[[parms$individuals.col]] != parms$population.ID,]
-    data2[[parms$individuals.col]] <- sample(data2[[parms$individuals.col]]) # should we bootstrap with replace = TRUE?
+    # If boostrap argument == TRUE, sample points with replacement - each location may be chosen more than once
+    if(bootstrap) {
+      data2[[parms$individuals.col]] <- sample(data2[[parms$individuals.col]], replace = TRUE) # should we bootstrap with replace = TRUE?
+    } else { # If boostrap argument == FALSE, locations are permutated instead of bootstraped (no replacement)
+      data2[[parms$individuals.col]] <- sample(data2[[parms$individuals.col]])
+    }
     
     # Combine randomized individuals with population
     pop.dat <- data2 # Copying data
@@ -231,7 +241,7 @@ SpatIS_bootstrap <- function(SpatIS.object, permutations = 99, plot = TRUE)
   }
   
   # Calculating significance (p-value)
-  (p <- sum(SpatIS.pop <= SpatIS.pop.random)/(permutations+1)) # proportion of random values that are greater than the observed value
+  (p <- sum(SpatIS.pop <= SpatIS.pop.random)/(iterations+1)) # proportion of random values that are greater than the observed value
   # Plot signigicance
   if(plot == TRUE) {
     hist(SpatIS.pop.random[-1], main = "", xlab = "Spatial Individual Specialization", ylab = "Frequency",

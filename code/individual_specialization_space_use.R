@@ -28,13 +28,13 @@ if(!require(tcltk)) install.packages("tcltk", dep=T); library(tcltk)
 if(!require(bipartite)) install.packages("bipartite", dep=T); library(bipartite)
 
 # Path to code folder
-codedir <- "/home/leecb/Documentos/UNESP/artigos/ms_Rogeri_etal_indidivual_specialization_space_use/Analisys/code"
+codedir <- "/home/leecb/Github/SpatIS/code"
 
 # Path to data folder
-datadir <- "/home/leecb/Documentos/UNESP/artigos/ms_Rogeri_etal_indidivual_specialization_space_use/Analisys/data"
+datadir <- "/home/leecb/Github/SpatIS/data"
 
 # Path to output folder
-outputdir <- "/home/leecb/Documentos/UNESP/artigos/ms_Rogeri_etal_indidivual_specialization_space_use/Analisys/output"
+outputdir <- "/home/leecb/Github/SpatIS/output"
 
 # Loading function to load Google Maps images
 # Functions built by Luiz Gustavo Oliveira-Santos and Carlos Andre Zucco
@@ -48,7 +48,8 @@ source("spatis_source_code.R")
 setwd(datadir)
 
 # Load land use map
-landuse.map <- readOGR("map_area/", layer = "map_saocarlos_wgs84_utm23S")
+# landuse.map <- readOGR("map_area/", layer = "map_saocarlos_wgs84_utm23S")
+landuse.map <- readOGR("map_area/", layer = "map_cut_wgs84_utm23S")
 landuse.map <- spTransform(landuse.map, CRS("+proj=utm +datum=WGS84 +zone=23 +south +ellps=WGS84 +towgs84=0,0,0"))
 
 # Load foraging areas map
@@ -124,7 +125,7 @@ spdados <- spdados[order(spdados$ID, time),]  ### order data chronologically
 # Extracting map information for each location
 
 mapvalues <- over(spdados, landuse.map)
-spdados$polygon_ID <- mapvalues$ID
+spdados$polygon_ID <- mapvalues$OBJECTID
 spdados$land_use_class <- mapvalues$Class
 
 areavalues <- over(spdados, resource.areas)
@@ -170,8 +171,20 @@ for(i in 1:n){
 }
 
 # With resource areas as background
-plot(resource.areas)
+plot(resource.areas, border = "red", lwd = 2)
 points(spdados, pch = 20, col = cor[as.factor(spdados$ID)])
+
+# With land use map and foraging areas as background
+# With land use map as background
+# nclass <- length(levels(landuse.map$Class))
+# plot(landuse.map, col = grey.colors(nclass)[landuse.map$Class])
+levels(landuse.map$Class)
+rgb255 <- function(r, g, b) rgb(r, g, b, maxColorValue = 255)
+cols <- c(rgb255(103, 100, 107), rgb255(73, 70, 77), rgb255(130, 130, 130), 
+          rgb255(225, 225, 225), rgb255(178, 178, 178), rgb255(204, 204, 204))
+plot(landuse.map, col = cols, border = cols, lwd = 0.1)
+points(spdados, pch = 20, col = cor[as.factor(spdados$ID)])
+plot(resource.areas, border = "red", lwd = 2, add = T)
 
 # Google maps image as background
 plot.google(spdados, track=F, points = T, transpp = 0.5, pcol = cor[as.factor(spdados$ID)], cex=0.5) # google map image of the area
@@ -273,6 +286,12 @@ dev.off()
 #     (considering kernel 50% of individuals and land use class edges)
 ##########################################
 
+# Removing individual 06 (since the its home range did not reach stability - see below)
+spdados.ud <- spdados[spdados$ID != "06",]
+# Re-numbering individuals
+spdados.ud$ID <- c(1:length(unique(spdados.ud$ID)))[as.factor(spdados.ud$ID)]
+spdados.ud$ID <- ifelse(spdados.ud$ID < 10, paste(0, spdados.ud$ID, sep = ""), spdados.ud$ID)
+
 # Output folder
 setwd(outputdir)
 
@@ -280,7 +299,7 @@ setwd(outputdir)
 # Calculating points por individual and polygon and organizing it as a network
 
 # Aggregating number of points per individual per polygon
-points.areas.long <- aggregate(rep(1, nrow(spdados)), by = list(ID = spdados$ID, area = spdados$resource_area), FUN = sum)
+points.areas.long <- aggregate(rep(1, nrow(spdados.ud)), by = list(ID = spdados.ud$ID, area = spdados.ud$resource_area), FUN = sum)
 
 # Transforming it into a matrix (network)
 points.areas.wide <- reshape(points.areas.long, timevar = "area", idvar = "ID", direction = "wide")
@@ -446,7 +465,11 @@ for(i in 1:length(ids)){ ## plot all curves with 2 seconds interval
 
 # INDIVIDUAL ID = 06 (tag_ID = 49) DID NOT REACH STABILITY ON ITS AREA OF USE - WE ARE GOING TO EXCLUDE IT FROM THE SPACE USE ANALYSES
 
+# Removing individual 06 (since the its home range did not reach stability - see below)
 spdados.ud <- spdados[spdados$ID != "06",]
+# Re-numbering individuals
+spdados.ud$ID <- c(1:length(unique(spdados.ud$ID)))[as.factor(spdados.ud$ID)]
+spdados.ud$ID <- ifelse(spdados.ud$ID < 10, paste(0, spdados.ud$ID, sep = ""), spdados.ud$ID)
 
 ##########################
 # Home range analysis
@@ -496,7 +519,6 @@ for(i in 1:length(areas)) {
 }
 
 # Fixed Kernel
-
 ids <- unique(spdados.ud$ID)
 kernels <- list()
 for(i in 1:length(ids)) {
@@ -507,7 +529,7 @@ for(i in 1:length(ids)) {
   kernels[[i]] <- kudl
 }
 
-# Valor das HR
+# Value of activity areas - kernel 95%
 kern95 <- data.frame(-1, -1)[-1,]
 colnames(kern95) <- c("id", "area")
 homeranges <- list()
@@ -520,12 +542,13 @@ for(i in (1:length(ids))) {
     rgb255 <- function(r, g, b) rgb(r, g, b, maxColorValue = 255)
     cols <- c(rgb255(103, 100, 107), rgb255(73, 70, 77), rgb255(130, 130, 130), 
               rgb255(225, 225, 225), rgb255(178, 178, 178), rgb255(204, 204, 204))
-    plot(landuse.map, col = cols)
+    plot(landuse.map, col = cols, border = cols, lwd = 0.1)
   }
   plot(homerange, border=cor[i], lwd = 2, add = T)
 }
 kern95
 
+# Value of core activity areas - kernel 50%
 kern50 <- data.frame(-1, -1)[-1,]
 colnames(kern50) <- c("id", "area")
 homeranges <- list()
@@ -538,12 +561,36 @@ for(i in (1:length(ids))) {
     rgb255 <- function(r, g, b) rgb(r, g, b, maxColorValue = 255)
     cols <- c(rgb255(103, 100, 107), rgb255(73, 70, 77), rgb255(130, 130, 130), 
               rgb255(225, 225, 225), rgb255(178, 178, 178), rgb255(204, 204, 204))
-    plot(landuse.map, col = cols)
+    plot(landuse.map, col = cols, border = cols, lwd = 0.1)
   }
   plot(homerange, border=cor[i], lwd = 2, add = T)
 }
 kern50
 
+# Export kernel 50%
+setwd(outputdir)
+tiff("Fig_S1_kernel50.tif", width = 15, height = 15, units = "cm", res = 300)
+par(mar = c(0, 0, 0, 0))
+kern50 <- data.frame(-1, -1)[-1,]
+colnames(kern50) <- c("id", "area")
+homeranges <- list()
+cor <- c(rainbow(length(ids)-1), "black") # the last one is for the whole population
+for(i in (1:length(ids))) {
+  homerange <- adehabitatHR::getverticeshr(kernels[[i]], percent = 50)
+  homeranges[[i]] <- homerange
+  kern50 <- rbind(kern50, homerange@data)
+  if(i == 1){
+    rgb255 <- function(r, g, b) rgb(r, g, b, maxColorValue = 255)
+    cols <- c(rgb255(103, 100, 107), rgb255(73, 70, 77), rgb255(130, 130, 130), 
+              rgb255(225, 225, 225), rgb255(178, 178, 178), rgb255(204, 204, 204))
+    plot(landuse.map, col = cols, border = cols, lwd = 0.1)
+  }
+  plot(homerange, border=cor[i], lwd = 2, add = T)
+}
+kern50
+dev.off()
+
+# Exporting values
 area.use.vals <- cbind(kern95, kern50[2], t(areas))
 colnames(area.use.vals) <- c("id", 'kern95', "kern50", "MCP95")
 
@@ -566,7 +613,7 @@ SpatIS.pop <- calculated.spatis$SpatIS.population
 # write.table(SpatpIS.ind, "individual_spatis.csv", sep = "\t", row.names = F, col.names = T)
 
 # Bootstrap - mixing points to assess if SpatIS is significantly greater than zero
-randomized <- SpatIS_bootstrap(calculated.spatis, permutations = 999)
+randomized <- SpatIS_randomize(calculated.spatis, iterations = 999)
 
 # Doing it manually
 # naleat <- 100
@@ -595,11 +642,11 @@ randomized <- SpatIS_bootstrap(calculated.spatis, permutations = 999)
 # P-value
 (p <- randomized$p)
 
-
 # Bootstrap - mixing points to assess if SpatIS is significantly greater than zero
 #             while keeping the roofing points
 naleat <- 999
 SpatIS_aleat_center <- SpatIS.pop
+population.line <- 
 for(i in 1:naleat)
 {
   print(i)
@@ -619,6 +666,7 @@ for(i in 1:naleat)
   spdados2 <- rbind(spdados2, pop)
   
   over <- kerneloverlap(spdados2[,1], grid = 100, extent = 1.5, method = "VI")
+  population.line <- which(rownames(over) == "all")
   # Overlap of each individual with the whole population utilization distribution
   SpatIS.ind.aux <- over[-population.line,population.line]
   # Individual SpatIS = 1 - overlap of the individual with the population
@@ -629,17 +677,18 @@ for(i in 1:naleat)
 }
 
 # P-value
-(p <- sum(SpatIS_real <= SpatIS_aleat_center)/(naleat+1)) # proportion of random values that are greater than the observed value
+(p <- sum(SpatIS.pop <= SpatIS_aleat_center)/(naleat+1)) # proportion of random values that are greater than the observed value
 hist(SpatIS_aleat_center, main = "", xlab = "Spatial Individual Specialization", ylab = "Frequency",
-     xlim = c(min(SpatIS_aleat_center), SpatIS_real))
-abline(v = SpatIS_real, col = "red")
+     xlim = c(min(SpatIS_aleat_center), SpatIS.pop))
+abline(v = SpatIS.pop, col = "red")
 
 # Export
 setwd(outputdir)
-png("p_value_SpatIS_random.png", width = 10, height = 10, units = "cm", res = 300)
-hist(SpatIS_aleat_center, main = "", xlab = "Spatial Individual Specialization", ylab = "Frequency",
-     xlim = c(min(SpatIS_aleat_center), SpatIS_real))
-abline(v = SpatIS_real, col = "red")
+# png("p_value_SpatIS_random.png", width = 10, height = 10, units = "cm", res = 300)
+tiff("p_value_SpatIS_random.tif", width = 10, height = 10, units = "cm", res = 300)
+hist(SpatIS_aleat_center[-1], main = "", xlab = "Spatial Individual Specialization", ylab = "Frequency",
+     xlim = c(min(SpatIS_aleat_center), SpatIS.pop), breaks = 20)
+abline(v = SpatIS.pop, col = "red")
 dev.off()
 
 
@@ -679,10 +728,10 @@ for(i in (1:length(ids))) {
     rgb255 <- function(r, g, b) rgb(r, g, b, maxColorValue = 255)
     cols <- c(rgb255(103, 100, 107), rgb255(73, 70, 77), rgb255(130, 130, 130), 
               rgb255(225, 225, 225), rgb255(178, 178, 178), rgb255(204, 204, 204))
-    x <- c(196250, 209856)
-    y <- c(7561021, 7574393)
-    plot(x, y, type = "n", bty = "n", axes = F)
-    plot(landuse.map, col = cols, add = T)
+    # x <- c(196250, 209856)
+    # y <- c(7561021, 7574393)
+    # plot(x, y, type = "n", bty = "n", axes = F)
+    plot(landuse.map, col = cols, border = cols, lwd = 0.1)
   }
   plot(homerange, border=cor[i], lwd = 2, add = T)
 }
