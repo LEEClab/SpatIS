@@ -122,7 +122,7 @@ SpatIS <- function(data, individuals.col, population.ID = NULL,
 
 ################################################################################
 #
-# SpatIS_bootstrap
+# SpatIS_randomize
 # 
 # Patricia K. Rogeri - pa_bio04@yahoo.com.br
 # Bernardo B. S. Niebuhr - bernardo_brandaum@yahoo.com.br

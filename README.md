@@ -6,10 +6,18 @@ We present here the source code for running SpatIS using movement data of indivi
 
 ## Code
 
-The scripts in this repository are the following:
-- 
+The scripts in this repository are the following (look at the folder [code](https://github.com/LEEClab/SpatIS/tree/master/code):
+- [spatis_source_code.R](https://github.com/LEEClab/SpatIS/blob/master/code/spatis_source_code.R): source code with SpatIS and SpatIS_randomize R functions (details within the script)
+- [individual_specialization_space_use.R](https://github.com/LEEClab/SpatIS/blob/master/code/individual_specialization_space_use.R): script for spatial and individual specialization analyses from Kerches-Rogeri et al (*in prep.*).
+- [test_for_body_size_and_sex.R](https://github.com/LEEClab/SpatIS/blob/master/code/test_for_body_size_and_sex.R): script for testing for body size and sex effects on individual use of space
+- spatis_tutorial (in [pdf](https://github.com/LEEClab/SpatIS/blob/master/code/spatis_tutorial.pdf) and [markdown](https://github.com/LEEClab/SpatIS/blob/master/code/spatis_tutorial.Rmd) formats): Tutorial for applying SpatIS for other data sets. It may also be found online [here](http://rpubs.com/bniebuhr/spatis).
 
-## Citation
+## Data
+
+We present here all the data used for analysis by Kerches-Rogeri et al (*in prep.*):
+- [bat_locations_ufscar_VHF.csv](https://github.com/LEEClab/SpatIS/blob/master/data/bat_locations_ufscar_VHF.csv): telemetry fixes for 11 individual bats monitored in Sao Carlos, SP, Brazil.
+- [test_for_bodysize_sex_polygons.csv](https://github.com/LEEClab/SpatIS/blob/master/data/test_for_bodysize_sex_polygons.csv): proportion of use of habitat polygons in the landscape by each individual.
+- [test_for_bodysize_sex_foraging_sites.csv](https://github.com/LEEClab/SpatIS/blob/master/data/test_for_bodysize_sex_foraging_sites.csv): proportion of use of foraging sites by each individual.
 
 ## Citation
 
@@ -19,7 +27,7 @@ Kerches-Rogeri, P.; Niebuhr, B. B. S.; Muylaert, R. L., Mello, M. A. R. Individu
 
 ## Contact
 
-If you have questions or suggestions, do not hesitate to contact us:
+If you have questions or suggestions, do not hesitate to contact us (or open an issue [here](https://github.com/LEEClab/SpatIS/issues):
 + Patricia Kerches-Rogeri <<parogeri@gmail.com>>  
 + Bernardo B. S. Niebuhr <<bernardo_brandaum@yahoo.com.br>>  
 + Renara L. Muylaert <<renatamuy@gmail.com>>  
