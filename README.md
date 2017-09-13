@@ -27,7 +27,7 @@ Kerches-Rogeri, P.; Niebuhr, B. B. S.; Muylaert, R. L., Mello, M. A. R. Individu
 
 ## Contact
 
-If you have questions or suggestions, do not hesitate to contact us (or open an issue [here](https://github.com/LEEClab/SpatIS/issues):
+If you have questions or suggestions, do not hesitate to contact us (or open an issue [here](https://github.com/LEEClab/SpatIS/issues)):
 + Patricia Kerches-Rogeri <<parogeri@gmail.com>>  
 + Bernardo B. S. Niebuhr <<bernardo_brandaum@yahoo.com.br>>  
 + Renara L. Muylaert <<renatamuy@gmail.com>>  
