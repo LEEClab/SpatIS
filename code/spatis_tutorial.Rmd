@@ -1,7 +1,7 @@
 ---
 title: 'SpatIS tutorial: Spatial Individual Specialization Index'
 author: Appendix 1. Kerches-Rogeri, P.; Niebuhr, B. B. S.; Muylaert, R. L., Mello,
-  M. A. R. Individual specialization in the space use of frugivorous bats. In prep.
+  M. A. R. Individual specialization in the use of space by frugivorous bats. In prep.
 output: html_document
 ---
 
@@ -11,9 +11,7 @@ Individuals are naturally different and heterogeneous within populations. These 
 
 In this context, the niche is generally represented by the type and amount of food items or other resources that are consumed by individuals. As resources are heterogeneously distributed in space in different habitats, it is expected that individual specialization leaves its shadow over space, or even that different environments or space itself may be viewed as resources, so that individuals may be more or less specialists regarding their movement patterns, habitat selection, and use of space.
 
-Here we describe how to calculate the Spatial Individual Specialization index (SpatIS) 
-
-Here we describe the procedures to calculate the Spatial Individual Specialization index (*SpatIS*) using the R function `SpatIS`, based on movement data of individuals of the same population. We also use the function `SpatIS_randomize` to check if the SpatIS for a population is significant, i.e., different from what it would be expected at random, if (at least some of) individuals were not specialists in their use of space. To that end, first we simulate a virtual landscape with some different resources located heterogeously in space. Then we simulate five individuals that present preferences for different types of resources, which is reflected in their movement patterns. Finally we calculate *SpatIS* and run `SpatIS_randomize` for this simulated population.
+Here we describe how to calculate the Spatial Individual Specialization index (*SpatIS*) using the R function `SpatIS`, based on movement data of individuals of the same population. We also use the function `SpatIS_randomize` to check if the *SpatIS* for a population is significant, i.e., different from what it would be expected at random, if (at least some of) individuals were not specialists in their use of space. To that end, first we simulate a virtual landscape with some different resources located heterogeously in space. Then we simulate five individuals that present preferences for different types of resources, which is reflected in their movement patterns. Finally we calculate *SpatIS* and run `SpatIS_randomize` for this simulated population.
 
 # Simulating space and individuals
 
@@ -258,3 +256,11 @@ permutations
 If you need more information or use *SpatIS*, please refer to
 
 Kerches-Rogeri, P.; Niebuhr, B. B. S.; Muylaert, R. L., Mello, M. A. R. Individual specialization in the space use of frugivorous bats. *In prep.*
+
+# Additional references
+
+Bolnick, D. I. et al. 2003. The ecology of individuals: incidence and implications of individual specialization. American Naturalist, 161, 1–28.
+
+Calenge, C. 2006. The package adehabitat for the R software: a tool for the analysis of space and habitat use by animals. Ecological Modelling, 197, 516-519.
+
+Prof. Juan Manuel Morales webpage. https://sites.google.com/site/pajarom/. 
