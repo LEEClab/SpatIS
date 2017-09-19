@@ -26,6 +26,7 @@ if(!require(RgoogleMaps)) install.packages("RgoogleMaps", dep=T); library(Rgoogl
 if(!require(png)) install.packages("png", dep=T); library(png)
 if(!require(tcltk)) install.packages("tcltk", dep=T); library(tcltk)
 if(!require(bipartite)) install.packages("bipartite", dep=T); library(bipartite)
+if(!require(colortools)) install.packages("colortools", dep=T); library(colortools)
 
 # Path to code folder
 codedir <- "/home/leecb/Github/SpatIS/code"
@@ -336,7 +337,7 @@ write.table(freq.areas.wide, "network_matrix_freqpoints_ids_areas_NOHEADER.txt",
 points.areas.decrease <- points.areas.wide[order(rowSums(points.areas.wide), decreasing = T), order(colSums(points.areas.wide), decreasing = T)]
 
 # As a bipartite network
-plotweb(web = points.areas.decrease, method="normal", text.rot=90,
+plotweb(web = points.areas.decrease, method="cca", text.rot=90,
         col.interaction="grey50",
         col.high = "darkolivegreen3", col.low="brown3",
         bor.col.interaction ="grey50", bor.col.high="darkolivegreen3",
@@ -347,7 +348,7 @@ mtext("Foraging sites", 3)
 # As a binary network
 binary.points.areas <- ifelse(points.areas.decrease > 1, 1, 0)
 bin.points.areas.decrease <- binary.points.areas[order(rowSums(binary.points.areas), decreasing = T), order(colSums(binary.points.areas), decreasing = T)]
-plotweb(web = bin.points.areas.decrease, method="normal", text.rot=90,
+plotweb(web = bin.points.areas.decrease, method="cca", text.rot=90,
         col.interaction="grey50",
         col.high = "darkolivegreen3", col.low="brown3",
         bor.col.interaction ="grey50", bor.col.high="darkolivegreen3",
@@ -418,6 +419,7 @@ for(i in 1:length(ids)){  ## loop for individuals
 names(cumHRmcp) <- ids
 cumHRmcp
 
+par(mar = c(5, 4, 4, 2) + 0.1)
 # Seeing cummulative MCP area plots
 for(i in 1:length(ids)) { ## plot all curves with 2 seconds interval
   plot(cumHRmcp[[i]]$hr ~ cumHRmcp[[i]]$ss, cex=0.5, pch=16, main=ids[i],
@@ -699,20 +701,25 @@ dev.off()
 # Output folder
 setwd(outputdir)
 
-png("Fig_results.png", width = 20, height = 10, units = "cm", res = 300)
-tiff("Fig_results.tif", width = 20, height = 10, units = "cm", res = 300)
-par(mfrow = c(1,2), mar = c(0, 0, 0, 0))
+# png("Fig_results.png", width = 20, height = 20, units = "cm", res = 300)
+tiff("Fig_results.tif", width = 20, height = 20, units = "cm", res = 300)
+par(mfrow = c(2,2), mar = c(0, 0, 0, 0))
+
+plot(0, 0, xlim = c(0,1), ylim = c(0,1), type = "n", axes = F)
+#plot(landuse.map, col = "white", border = "white", lwd = 0.1)
+mtext("A", side = 3, at = 0.1, line = -3, cex = 1.5)
 
 # Figure A - network
 # As a bipartite network
-plotweb(web = points.areas.decrease, method="normal", text.rot=90,
-        col.interaction="grey50",
-        col.high = "darkolivegreen3", col.low="brown3",
-        bor.col.interaction ="grey50", bor.col.high="darkolivegreen3",
-        bor.col.low="brown3")
+cols <- complementary("purple4", plot = F)
+plotweb(web = points.areas.decrease, method="cca", text.rot=0, 
+        col.interaction="grey65",
+        col.high = cols[1], col.low=cols[2],
+        bor.col.interaction ="grey65", bor.col.high=cols[1],
+        bor.col.low=cols[2], labsize = 1.5)
 mtext("Individuals", 1, line = 0)
 mtext("Foraging sites", 3, line = 0)
-mtext("A", 3, at = 0, cex = 1.5)
+mtext("B", 3, at = 0, cex = 1.5)
 
 # Figure B - map + space use
 # Valor das HR
@@ -737,11 +744,36 @@ for(i in (1:length(ids))) {
 }
 kern95
 
-mtext("B", 3, at = 196250, cex = 1.5)
+mtext("C", 3, at = 198500, cex = 1.5)
+
+# Figure C - map + space use (kernel 50%)
+# Valor das HR
+kern95 <- data.frame(-1, -1)[-1,]
+colnames(kern95) <- c("id", "area")
+homeranges <- list()
+cor <- c(rainbow(length(ids)-1), "black") # the last one is for the whole population
+for(i in (1:length(ids))) {
+  homerange <- adehabitatHR::getverticeshr(kernels[[i]], percent = 50)
+  homeranges[[i]] <- homerange
+  kern50 <- rbind(kern50, homerange@data)
+  if(i == 1){
+    rgb255 <- function(r, g, b) rgb(r, g, b, maxColorValue = 255)
+    cols <- c(rgb255(103, 100, 107), rgb255(73, 70, 77), rgb255(130, 130, 130), 
+              rgb255(225, 225, 225), rgb255(178, 178, 178), rgb255(204, 204, 204))
+    # x <- c(196250, 209856)
+    # y <- c(7561021, 7574393)
+    # plot(x, y, type = "n", bty = "n", axes = F)
+    plot(landuse.map, col = cols, border = cols, lwd = 0.1)
+  }
+  plot(homerange, border=cor[i], lwd = 2, add = T)
+}
+kern95
+
+mtext("D", 3, at = 198500, cex = 1.5)
 
 # legend("topright", legend = c())
 
-# # Figure C - significance of SpatIS
+# # Figure D - significance of SpatIS
 # # P-value
 # (p <- sum(SpatIS_real <= SpatIS_aleat_center)/naleat) # proportion of random values that are greater than the observed value
 # hist(SpatIS_aleat_center, main = "", xlab = "Spatial Individual Specialization", ylab = "Frequency",
