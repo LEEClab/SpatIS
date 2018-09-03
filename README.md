@@ -6,7 +6,7 @@ We present here the source code for running SpatIS using movement data of indivi
 
 ## Code
 
-The scripts in this repository are the following (look at the folder [code](https://github.com/LEEClab/SpatIS/tree/master/code):
+The scripts in this repository are the following (look at the folder [code](https://github.com/LEEClab/SpatIS/tree/master/code)):
 - [spatis_source_code_v1_0.R](https://github.com/LEEClab/SpatIS/blob/master/code/spatis_source_code.R): source code with SpatIS and SpatIS_randomize R functions (details within the script)
 - [individual_specialization_space_use.R](https://github.com/LEEClab/SpatIS/blob/master/code/individual_specialization_space_use.R): script for spatial and individual specialization analyses from Kerches-Rogeri et al (*in prep.*).
 - [test_for_body_size_and_sex.R](https://github.com/LEEClab/SpatIS/blob/master/code/test_for_body_size_and_sex.R): script for testing for body size and sex effects on individual use of space
