@@ -22,11 +22,14 @@ if(!require(adehabitatHR)) install.packages("adehabitatHR", dep=T); library(adeh
 if(!require(sp)) install.packages("sp", dep=T); library(sp)
 if(!require(rgdal)) install.packages("rgdal", dep=T); library(rgdal)
 if(!require(proj4)) install.packages("proj4", dep=T); library(proj4)
-if(!require(RgoogleMaps)) install.packages("RgoogleMaps", dep=T); library(RgoogleMaps)
 if(!require(png)) install.packages("png", dep=T); library(png)
 if(!require(tcltk)) install.packages("tcltk", dep=T); library(tcltk)
 if(!require(bipartite)) install.packages("bipartite", dep=T); library(bipartite)
 if(!require(colortools)) install.packages("colortools", dep=T); library(colortools)
+# if(!require(RgoogleMaps)) install.packages("RgoogleMaps", dep=T); library(RgoogleMaps)
+# if(!require(move)) install.packages("move", dep=T); library(move)
+# if(!require(ctmm)) install.packages("ctmm", dep=T); library(ctmm)
+
 
 # Path to code folder
 codedir <- "/home/leecb/Github/SpatIS/code"
@@ -42,7 +45,7 @@ outputdir <- "/home/leecb/Github/SpatIS/output"
 # Change to the folder where he code is located
 setwd(codedir)
 source("plot_google_2_1_source_code.R")
-source("spatis_source_code.R")
+source("spatis_source_code_v1_0.R")
 
 # Loading data
 # Change to the data folder
@@ -114,7 +117,7 @@ data$time <- ifelse(is.na(data$hour), NA, paste(data$hour, data$minute, data$sec
 
 # We are going to work with the following data
 data.f <- subset(data, select = c("ID", "x", "y", "date", "julian", "time", "tag_ID"))
-head(data.f)
+head(data.f, 30)
 
 # Transforming data into Spatial Points
 time <- as.POSIXct(paste(data.f$date, data.f$time), format="%Y-%m-%d %H:%M:%S")
@@ -141,15 +144,17 @@ ids <- unique(data.f$ID)
 cor <- rainbow(n)
 
 # No background
-plot(data.f$x, data.f$y, type = "n")
+plot(data.f$x, data.f$y, type = "n",
+     ylab = 'y', xlab = 'x')
 points(spdados, pch = 20, col = cor[as.factor(spdados$ID)])
 
 # One at a time
 for(i in 1:n){
-  plot(data.f$x, data.f$y, type = "n")
+  plot(data.f$x, data.f$y, type = "n",
+       ylab = 'y', xlab = 'x')
   points(spdados[spdados$ID == ids[i],], pch = 20, col = cor[i])
   mtext(paste("ID = ", ids[i], sep = ""), side = 3, line = -1)
-  Sys.sleep(2)
+  Sys.sleep(1)
 }
 
 # With land use map as background
@@ -168,7 +173,7 @@ for(i in 1:n){
   plot(landuse.map, col = cols)
   points(spdados[spdados$ID == ids[i],], pch = 20, col = cor[i])
   mtext(paste("ID = ", ids[i], sep = ""), side = 3, line = 1)
-  Sys.sleep(2)
+  Sys.sleep(1)
 }
 
 # With resource areas as background
@@ -188,6 +193,7 @@ points(spdados, pch = 20, col = cor[as.factor(spdados$ID)])
 plot(resource.areas, border = "red", lwd = 2, add = T)
 
 # Google maps image as background
+# Code for that was kindly shared by C.A. Zucco and L.G. Oliveira-Santos
 plot.google(spdados, track=F, points = T, transpp = 0.5, pcol = cor[as.factor(spdados$ID)], cex=0.5) # google map image of the area
 
 ##########################################
@@ -425,7 +431,7 @@ for(i in 1:length(ids)) { ## plot all curves with 2 seconds interval
   plot(cumHRmcp[[i]]$hr ~ cumHRmcp[[i]]$ss, cex=0.5, pch=16, main=ids[i],
        xlab="Number of locations",ylab="MCP 100% area (ha)" )
   points(cumHRmcp[[i]]$hr ~ cumHRmcp[[i]]$ss, type="l", lwd=0.7, lty=2)
-  Sys.sleep(2)
+  Sys.sleep(1)
 }
 
 # To save all plots
@@ -462,8 +468,63 @@ for(i in 1:length(ids)){ ## plot all curves with 2 seconds interval
   plot(cumHRkde[[i]]$hr~cumHRkde[[i]]$ss,cex=0.5,pch=16,main=ids[i],
        xlab="Numero de Localizoes",ylab="Area do kernel 95%(ha)" )
   points(cumHRkde[[i]]$hr~cumHRkde[[i]]$ss,type="l",lwd=0.7,lty=2)
-  Sys.sleep(2)
+  Sys.sleep(1)
 }
+
+# Plot for each individual
+setwd(outputdir)
+png('accumulation_curves.png', width = 15, height = 15, units = 'cm', res = 600)
+par(mfrow = c(4,3), mar = c(2,3,3,1) + 0.1, oma = c(3, 3, 0, 0))
+for(i in 1:length(ids)){ ## plot all curves with 2 seconds interval
+  if(i != 6) {
+    ind_num <- ifelse(i < 6, i, i-1)
+    plot(cumHRkde[[i]]$hr~cumHRkde[[i]]$ss,cex=0.5,pch=16,main=ind_num,
+         xlab="",ylab="")
+    points(cumHRkde[[i]]$hr~cumHRkde[[i]]$ss,type="l",lwd=0.7,lty=2)
+  }
+}
+mtext(text = "Number of locations", side = 1, outer = T, line = 1)
+mtext(text = "Space use area (kde 100%, in ha)", side = 2, outer = T, line = 1)
+
+dev.off()
+
+
+#-----------------------
+# Doing the same using the package ctmm
+# To do
+
+# datetime.char <- paste(spdados$date, spdados$time)
+# datetime.char2 <- datetime.char[!grepl(pattern = 'NA', datetime.char)]
+# datetime <- as.POSIXct(datetime.char2, format = '%Y-%m-%d %H:%M:%S')
+# 
+# spdados2 <- spdados[!grepl(pattern = 'NA', datetime.char),]
+# 
+# spdados3 <- spdados2[!duplicated(datetime),]
+# datetime <- datetime[!duplicated(datetime)]
+# coords <- coordinates(spdados3)
+# 
+# move.data <- move(x = as.numeric(coords[,1]), y = as.numeric(coords[,2]), 
+#                   time = datetime, 
+#                   proj = CRS('+proj=utm +datum=WGS84 +zone=23 +south +ellps=WGS84 +towgs84=0,0,0'),
+#                   data = spdados3@data, animal = spdados3$ID, sensor = 'VHF')
+# 
+# move.data@idData$Tag_ID <- move.data@idData$ID
+# mov.tel <- as.telemetry(move.data, projection = '+proj=utm +datum=WGS84 +zone=23 +south +ellps=WGS84 +towgs84=0,0,0')
+# str(mov.tel)
+# plot(mov.tel, col = rainbow(11))
+# 
+# for(i in 1:length(mov.tel)) {
+#   ind <- mov.tel[[i]]
+#   SVF <- variogram(ind)
+#   level <- c(0.5,0.95) # 50% and 95% CIs
+#   # xlim <- c(0, 5 %#% "day") # 0-5 day window
+#   xlim <- c(0, 12 %#% "hour") # 0-12 hour window
+#   par(mfrow = c(1,2))
+#   plot(SVF, xlim=xlim, level=level)
+#   title(ind@info$identity)
+#   plot(SVF, fraction = 0.5, level=level)
+#   Sys.sleep(1)
+# }
 
 # INDIVIDUAL ID = 06 (tag_ID = 49) DID NOT REACH STABILITY ON ITS AREA OF USE - WE ARE GOING TO EXCLUDE IT FROM THE SPACE USE ANALYSES
 
@@ -617,38 +678,26 @@ SpatIS.pop <- calculated.spatis$SpatIS.population
 # Bootstrap - mixing points to assess if SpatIS is significantly greater than zero
 randomized <- SpatIS_randomize(calculated.spatis, iterations = 999)
 
-# Doing it manually
-# naleat <- 100
-# SpatIS_aleat <- c()
-# for(i in 1:naleat)
-# {
-#   print(i)
-#   spdados2 <- spdados.ud[,1][spdados$ID != "all",]
-#   indivs <- sample(spdados2$ID)
-#   spdados2$ID <- indivs
-#   
-#   pop <- spdados2
-#   pop$ID <- "all"
-#   spdados2 <- rbind(spdados2, pop)
-#   
-#   over <- kerneloverlap(spdados2[,1], grid = 100, extent = 1.5, method = "VI")
-#   # Overlap of each individual with the whole population utilization distribution
-#   SpatIS.ind.aux <- over[-population.line,population.line]
-#   # Individual SpatIS = 1 - overlap of the individual with the population
-#   SpatIS.ind <- 1 - SpatIS.ind.aux
-#   # Population SpatIS = average of individual SpatIS
-#   SpatIS <- mean(SpatIS.ind)
-#   SpatIS_aleat <- c(SpatIS_aleat, SpatIS)
-# }
-
-# P-value
-(p <- randomized$p)
+# Let's look at the results
+str(randomized)
+# Individual values
+randomized$SpatIS.individual.random
+randomized$SpatIS.individual.observed
+# Population value
+randomized$SpatIS.population.random
+randomized$SpatIS.population.observed
+# Significance
+randomized$SpatIS.significance
+# Power analysis
+randomized$SpatIS.power
+randomized$SpatIS.power.curve
 
 # Bootstrap - mixing points to assess if SpatIS is significantly greater than zero
 #             while keeping the roofing points
-naleat <- 999
-SpatIS_aleat_center <- SpatIS.pop
-population.line <- 
+naleat <- 999#999
+SpatIS_populat_obs_rand <- SpatIS.pop
+SpatIS_indiv_obs_rand <- list()
+SpatIS_indiv_obs_rand[[1]] <- SpatIS.ind
 for(i in 1:naleat)
 {
   print(i)
@@ -672,27 +721,97 @@ for(i in 1:naleat)
   # Overlap of each individual with the whole population utilization distribution
   SpatIS.ind.aux <- over[-population.line,population.line]
   # Individual SpatIS = 1 - overlap of the individual with the population
-  SpatIS.ind <- 1 - SpatIS.ind.aux
+  SpatIS.ind.aleat <- 1 - SpatIS.ind.aux
+  SpatIS_indiv_obs_rand[[(i+1)]] <- SpatIS.ind.aleat
   # Population SpatIS = average of individual SpatIS
-  SpatIS <- mean(SpatIS.ind)
-  SpatIS_aleat_center <- c(SpatIS_aleat_center, SpatIS)
+  SpatIS <- mean(SpatIS.ind.aleat)
+  SpatIS_populat_obs_rand <- c(SpatIS_populat_obs_rand, SpatIS)
 }
+SpatIS_populat_obs_rand # unlist(lapply(SpatIS_indiv, mean)) # it is the same
+SpatIS_indiv_obs_rand
 
-# P-value
-(p <- sum(SpatIS.pop <= SpatIS_aleat_center)/(naleat+1)) # proportion of random values that are greater than the observed value
-hist(SpatIS_aleat_center, main = "", xlab = "Spatial Individual Specialization", ylab = "Frequency",
-     xlim = c(min(SpatIS_aleat_center), SpatIS.pop))
-abline(v = SpatIS.pop, col = "red")
+# Save analysis data
+save.image('spatis_aleat.RData')
 
-# Export
-setwd(outputdir)
-# png("p_value_SpatIS_random.png", width = 10, height = 10, units = "cm", res = 300)
-tiff("p_value_SpatIS_random.tif", width = 10, height = 10, units = "cm", res = 300)
-hist(SpatIS_aleat_center[-1], main = "", xlab = "Spatial Individual Specialization", ylab = "Frequency",
-     xlim = c(min(SpatIS_aleat_center), SpatIS.pop), breaks = 20)
-abline(v = SpatIS.pop, col = "red")
-dev.off()
+observed <- SpatIS_indiv_obs_rand[[1]]
+expected <- SpatIS_indiv_obs_rand[2:(naleat+1)]
+expected.polled <- unlist(expected)
 
+# significance
+t.test(observed, expected.polled, alternative = 'greater', mu = 0, 
+       var.equal = FALSE, conf.level = 0.95)
+
+# Other ways of calculating significance
+# install.packages('BSDA', dependencies = T)
+# library(BSDA)
+# z.test(observed, expected.polled, alternative = 'greater', mu = 0, 
+#        sigma.x = sd(observed), sd(expected.polled), conf.level = 0.95)
+
+# power analysis
+t.power = function(obs, exp, alpha = 0.05){
+  ts = lapply(X = exp, FUN = t.test, y = obs, alternative = 'less', mu = 0, 
+               var.equal = FALSE, conf.level = 1-alpha)
+  
+  pval <- function(x) x$p.value
+  tps <- unlist(lapply(ts, pval))
+
+  sum(tps < .05) / length(tps)
+}
+t.power(obs = observed, exp = expected, alpha = 0.05)
+
+# Sampling sufficiency
+t.power.vs.n <- function(n, observed, expected, alpha = 0.05, n.repeat = 100) {
+  
+  power.val <- c()
+  for(i in 1:n.repeat) {
+    samp.obs <- sample(observed, n)
+    samp.exp <- lapply(expected, sample, n)
+    power.val <- c(power.val, t.power(samp.obs, samp.exp, alpha = alpha))
+  }
+  # list(power.val, mean(power.val))
+  mean(power.val)
+}
+t.power.vs.n(3, observed = observed, expected = expected)
+data.frame(2:length(observed), unlist(lapply(2:length(observed), t.power.vs.n, observed = observed, expected = expected)))
+
+# Other ways of calculating power
+# install.packages('pwr', dependencies = T)
+# library(pwr)
+# eff_size <- function(observed, expected.polled) {
+#   abs(mean(observed) - mean(expected.polled))/
+#     sqrt(((length(observed)-1)*var(observed) + (length(expected.polled)-1)*var(expected.polled))/(length(observed)+length(expected.polled)-2))
+# }
+# effect_size = eff_size(observed, expected.polled)
+# a <- pwr.t2n.test(n1 = length(observed), n2= length(expected.polled), d = effect_size, sig.level = 0.95)
+# a$power
+# 
+# t2n.power.vs.n <- function(n, observed, expected.pooled) {
+#   samp.obs <- sample(observed, n)
+#   samp.exp <- unlist(lapply(expected, sample, n))
+#   e.size <- eff_size(observed = samp.obs, expected.polled = samp.exp)
+#   pwr.t2n.test(n1 = length(samp.obs), n2= length(samp.exp), d = e.size, sig.level = 0.95)$power
+# }
+# t2n.power.vs.n(2, observed = observed, expected = expected.polled)
+# unlist(lapply(2:10, t2n.power.vs.n, observed = observed, expected = expected))
+# 
+# install.packages('asbio', dep = T)
+# library(asbio)
+# ?power.z.test
+# 
+# # P-value
+# (p <- sum(SpatIS.pop <= SpatIS_aleat_center)/(naleat+1)) # proportion of random values that are greater than the observed value
+# hist(SpatIS_aleat_center, main = "", xlab = "Spatial Individual Specialization", ylab = "Frequency",
+#      xlim = c(min(SpatIS_aleat_center), SpatIS.pop))
+# abline(v = SpatIS.pop, col = "red")
+# 
+# # Export
+# setwd(outputdir)
+# # png("p_value_SpatIS_random.png", width = 10, height = 10, units = "cm", res = 300)
+# tiff("p_value_SpatIS_random.tif", width = 10, height = 10, units = "cm", res = 300)
+# hist(SpatIS_aleat_center[-1], main = "", xlab = "Spatial Individual Specialization", ylab = "Frequency",
+#      xlim = c(min(SpatIS_aleat_center), SpatIS.pop), breaks = 20)
+# abline(v = SpatIS.pop, col = "red")
+# dev.off()
 
 ##########################################
 # 4)  Creating figure with results
@@ -701,6 +820,7 @@ dev.off()
 # Output folder
 setwd(outputdir)
 
+# Fig. 3 from the manuscript
 # png("Fig_results.png", width = 20, height = 20, units = "cm", res = 300)
 tiff("Fig_results.tif", width = 20, height = 20, units = "cm", res = 300)
 par(mfrow = c(2,2), mar = c(0, 0, 0, 0))
@@ -786,3 +906,17 @@ mtext("D", 3, at = 198500, cex = 1.5)
 par(mfrow = c(1,1))
 dev.off()
 
+# Fig. S2 from the manuscript - SpatIS significance
+# png("spatis_significance.png", width = 15, height = 15, units = "cm", res = 600)
+tiff("spatis_significance.tif", width = 15, height = 15, units = "cm", res = 600)
+observed
+expected.polled
+
+brk_plot <- seq(0, 1, 0.05)
+hist(expected.polled, col = 'grey', freq = F, breaks = brk_plot, xlim = c(0, 1), 
+     main = '', xlab = 'Spatial Individual Specialization', ylab = 'Probability density')
+hist(observed, freq = F, breaks = brk_plot, col = rgb(1, 0, 0, alpha = 0.4), add = T)
+abline(v = mean(SpatIS_populat_obs_rand[2:length(SpatIS_populat_obs_rand)]), col = 1)
+abline(v = SpatIS_populat_obs_rand[1], col = 2)
+
+dev.off()

@@ -1,7 +1,0 @@
-name: Publish Document
-account: rpubs
-server: rpubs.com
-appId: https://api.rpubs.com/api/v1/document/307593/c2b25d9abccb438699abeee2e91f6b58
-bundleId: https://api.rpubs.com/api/v1/document/307593/c2b25d9abccb438699abeee2e91f6b58
-url: http://rpubs.com/bniebuhr/307593
-when: 1505313999.7482

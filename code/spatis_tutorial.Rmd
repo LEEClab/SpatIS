@@ -1,8 +1,11 @@
 ---
 title: 'SpatIS tutorial: Spatial Individual Specialization Index'
-author: Appendix 1. Kerches-Rogeri, P.; Niebuhr, B. B. S.; Muylaert, R. L., Mello,
+author: Appendix 1. Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello,
   M. A. R. Individual specialization in the use of space by frugivorous bats. In prep.
-output: html_document
+output: github_document
+  #   keep_md: true
+  # html_document: default
+  # pdf_document: default
 ---
 
 # Introduction
@@ -11,7 +14,7 @@ Individuals are naturally different and heterogeneous within populations. These 
 
 In this context, the niche is generally represented by the type and amount of food items or other resources that are consumed by individuals. As resources are heterogeneously distributed in space in different habitats, it is expected that individual specialization leaves its shadow over space, or even that different environments or space itself may be viewed as resources, so that individuals may be more or less specialists regarding their movement patterns, habitat selection, and use of space.
 
-Here we describe how to calculate the Spatial Individual Specialization index (*SpatIS*) using the R function `SpatIS`, based on movement data of individuals of the same population. We also use the function `SpatIS_randomize` to check if the *SpatIS* for a population is significant, i.e., different from what it would be expected at random, if (at least some of) individuals were not specialists in their use of space. To that end, first we simulate a virtual landscape with some different resources located heterogeously in space. Then we simulate five individuals that present preferences for different types of resources, which is reflected in their movement patterns. Finally we calculate *SpatIS* and run `SpatIS_randomize` for this simulated population.
+Here we describe how to calculate the Spatial Individual Specialization index (*SpatIS*) using the R function `SpatIS`, based on movement data of individuals of the same population. We also use the function `SpatIS_randomize` to check if the *SpatIS* for a population is significant, i.e., different from what it would be expected at random, if (at least some of) individuals were not specialists in their use of space. To that end, first we simulate a virtual landscape with some different resources located heterogeously in space. Then we simulate five individuals that present preferences for different types of resources, which is reflected in their movement patterns. Finally we calculate *SpatIS* and run `SpatIS_randomize` to test for significance and statistical power for this simulated population.
 
 # Simulating space and individuals
 
@@ -116,7 +119,7 @@ matplot(X, Y, type="l", pch=16, col=1:ntracks, asp=1,
 
 # Calculating SpatIS
 
-To calculate *SpatIS*, first we have to load the `SpatIS` function. To do that we may use the `source` function, loading it directly from [Github](https://github.com/LEEClab/SpatIS/blob/master/code/spatis_source_code.R) - which may not run depending on your Operational System - or [downloading SpatIS source code into your local computer](https://github.com/LEEClab/SpatIS/archive/master.zip), unpacking it and loading it from your local environment. Below we show both options.
+To calculate *SpatIS*, first we have to load the `SpatIS` function. To do that we may use the `source` function, loading it directly from [Github](https://github.com/LEEClab/SpatIS/blob/master/code/spatis_source_code_v1_0.R) - which may not run depending on your Operational System - or [downloading SpatIS source code into your local computer](https://github.com/LEEClab/SpatIS/archive/master.zip), unpacking it and loading it from your local environment. Below we show both options.
 
 ```{r load_spatis, message=FALSE}
 # Loading from the web
@@ -125,7 +128,7 @@ To calculate *SpatIS*, first we have to load the `SpatIS` function. To do that w
 # Loading from the local environment, after downloading and unpacking
 # Path to code folder in your computer
 codedir <- "/home/leecb/Github/SpatIS/code/"
-source(paste(codedir, "spatis_source_code.R", sep = ""))
+source(paste(codedir, "spatis_source_code_v1_0.R", sep = ""))
 ```
 
 Then it is necessary to transform individuals' locations into a SpatialPointsDataFrame (basically a data frame with spatial information embedded; take a look [here](https://cran.r-project.org/web/packages/sp/vignettes/intro_sp.pdf) for more information), so that one of the columns indicates the individual ID. Below we show an example of how the space use data may be organized and how it looks like after the transformation into a SpatialPointsDataFrame.
@@ -237,9 +240,9 @@ for(i in (1:length(ids))) {
 
 # Calculating population SpatIS significance
 
-To check whether the population SpatIS observed is different from random, we use the function `SpatIS_randomize`. This function recalculates the population SpatIS value after randomizing the population locations between individuals. This randomization procedure is repeated a number of times (the default is `iterations = 99`) and used to calculated significance (a *p* value) as the number of times a random calculated population SpatIS is equal or greater than the observed one. The randomization process may be a bootstrap (randomize locations with replacement) or a permutation procedure (without replacement; this option is controled by the argument `bootstrap`). The input used for running `SpatIS_randomize` is the list that result from `SpatIS` function. The function also plots (if `plot = TRUE`) how far is the observed value (in red) from permutated ones.
+To check whether the population SpatIS observed is different from random, we use the function `SpatIS_randomize`. This function recalculates the population SpatIS value after randomizing the population locations between individuals. This randomization procedure is repeated a number of times (the default is `iterations = 99`) and used to calculated significance (a *p* value) through a comparison (a *t test*) between the distributions of observed and expected (after randomization of locations) individual SpatIS values. The randomization process may be a bootstrap (randomize locations with replacement) or a permutation procedure (without replacement; this option is controled by the argument `bootstrap`, which may be `TRUE` or `FALSE`) and the significance is calculated based on an alpha threshold (`alpha` parameter; default is `0.05`). The input used for running `SpatIS_randomize` is the list that results from `SpatIS` function. The function also plots (if `plot = TRUE`) how far is the observed value (in red) from permutated ones.
 
-The output is a list with the random SpatIS values, the observed SpatIS calculated through `SpatIS` function, and the significance (*p*) value.
+The output is a list with the random SpatIS values , the observed SpatIS calculated through `SpatIS` function (both for the individuals and the whole population), and the significance object (the result of a *t test*), and two objects regarding statistical power analysis.
 
 ```{r spatis_randomize, results = 'hide', fig.align = 'center', fig.asp = 1}
 # Run permutation
@@ -255,7 +258,7 @@ permutations
 
 If you need more information or use *SpatIS*, please refer to
 
-Kerches-Rogeri, P.; Niebuhr, B. B. S.; Muylaert, R. L., Mello, M. A. R. Individual specialization in the space use of frugivorous bats. *In prep.*
+Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. Individual specialization in the space use of frugivorous bats. *In prep.*
 
 # Additional references
 
