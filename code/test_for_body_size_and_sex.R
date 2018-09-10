@@ -15,8 +15,8 @@
 #######################################################
 
 # Loading pacakges
-library(bbmle)
-library(lme4)
+if(!require(install.load)) install.packages('install.load'); library(install.load)
+install.load::install_load('bbmle', 'lme4')
 
 # Path to data folder
 datadir <- "/home/leecb/Github/SpatIS/data"
@@ -27,7 +27,7 @@ setwd(datadir)
 
 ######################################################################
 # 1) Verifying the influence of body mass and sex on interindividual 
-#    variation considering individual use of foraging sites
+#    variation considering individual use of foraging sites (kernel 50%)
 ######################################################################
 
 # Load data
@@ -78,8 +78,8 @@ afss <- af$"Deviance"
 print(cbind(af, PctExplained = afss/sum(afss, na.rm = T)*100))
 
 ######################################################################
-# 1) Verifying the influence of body mass and sex on interindividual 
-#    variation considering individual use of foraging sites
+# 2) Verifying the influence of body mass and sex on interindividual 
+#    variation considering individual use of polygons (landscape elements)
 ######################################################################
 
 # Load data
