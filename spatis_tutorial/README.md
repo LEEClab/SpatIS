@@ -9,7 +9,7 @@ Individuals are naturally different and heterogeneous within populations. These 
 
 In this context, the niche is generally represented by the type and amount of food items or other resources that are consumed by individuals. As resources are heterogeneously distributed in space in different habitats, it is expected that individual specialization leaves its shadow over space, or even that different environments or space itself may be viewed as resources, so that individuals may be more or less specialists regarding their movement patterns, habitat selection, and use of space.
 
-Here we describe how to calculate the Spatial Individual Specialization index (*SpatIS*) using the R function `SpatIS`, based on movement data of individuals of the same population. We also use the function `SpatIS_randomize` to check if the *SpatIS* for a population is significant, i.e., different from what it would be expected at random, if (at least some of) individuals were not specialists in their use of space. To that end, first we simulate a virtual landscape with some different resources located heterogeously in space. Then we simulate five individuals that present preferences for different types of resources, which is reflected in their movement patterns. Finally we calculate *SpatIS* and run `SpatIS_randomize` to test for significance and statistical power for this simulated population.
+Here we describe how to calculate the Spatial Individual Specialization index (*SpatIS*) using the R function `SpatIS`, based on movement data of individuals of the same population. We also use the function `SpatIS_randomize` to test if the *SpatIS* for a population is significant, i.e., different from what it would be expected at random, if (at least some of) individuals were not specialists in their use of space. To that end, first we simulate a virtual landscape with some different resources located heterogeously in space. Then we simulate five individuals that present preferences for different types of resources, which is reflected in their movement patterns. Finally we calculate *SpatIS* and run `SpatIS_randomize` to test for significance and statistical power for this simulated population.
 
 Simulating space and individuals
 ================================
@@ -21,8 +21,8 @@ To represent the resources spread in space, we are going to create five resource
 library(plotrix)
 
 # Location of resources
-x.resources <- c(-40,30,40,-25,0) 
-y.resources <- c(35,30,-42,-30,0)
+x.resources <- c(-40, 30, 40, -25, 0) 
+y.resources <- c(35, 30, -42, -30, 0)
 radius <- c(10, 5, 8, 10, 5)
 
 # Draw landscape with prefered resources
@@ -40,9 +40,9 @@ for(i in 1:length(x.resources)) {
 
 <img src="spatis_tutorial_files/figure-markdown_github/landscape-1.png" style="display: block; margin: auto;" />
 
-To generate individual trajectories we are going to simulate 100-step paths of 5 individuals that follow a biased random walk, i.e., a random walk with attraction from a certain point in space (here defined by the location of resource items). Each individual starts near the origin (0,0) and will move biased to a different resource item, with greater or lower intensity, which represents their preference for distinct resources at different degrees. This is only one possible mechanism that may generate individuals to present different movement and space use patterns, but it was used here to generate location points and exemplify the application of *SpatIS*.
+To generate individual trajectories we are going to simulate 100-step paths of five individuals that follow a biased random walk, i.e., a random walk with attraction from a certain point in space (here defined by the location of resource items). Each individual starts near the origin (0,0) and will move biased to a different resource item, with greater or lower intensity, which represents their preference for distinct resources at different degrees. This is the only possible mechanism that may generate individuals to present different movement and space use patterns, but it was used here to generate location points and exemplify the application of *SpatIS*.
 
-Biased random walk code was adapted from [Prof. Juan M. Morales](https://sites.google.com/site/pajarom/). The step length of walks is difined by a Weibull distribution (with shape and scale parameters) and turning angles are drawn from a wrapped Cauchy distribution (whit *μ* and *ρ* parameters). In turn, the prefered direction of travel *μ* is a function of *β*, the coeffient of attraction or bias, which controls how strongly individuals' movements are biased towards a certain resource. Below we simulate these 5 tracks.
+Biased random walk code was adapted from [Prof. Juan M. Morales](https://sites.google.com/site/pajarom/). The step length of walks is difined by a Weibull distribution (with shape and scale parameters) and turning angles are drawn from a wrapped Cauchy distribution (with *μ* and *ρ* parameters). In turn, the prefered direction of travel *μ* is a function of *β*, the coeffient of attraction or bias, which controls how strongly individuals' movements are biased towards a certain resource. Below we simulate these five tracks.
 
 ``` r
 # Load library circular
@@ -69,7 +69,7 @@ X <- matrix(NA, nsteps, ntracks)
 Y <- matrix(NA, nsteps, ntracks)
 
 # Coordinates of the point of attraction/repulsion for each individual
-# These coordinated correspond to the 5 different resources created in the landscape
+# These correspond to the 5 different resources created in the landscape
 xh <- x.resources
 yh <- y.resources
 
@@ -131,7 +131,7 @@ codedir <- "/home/leecb/Github/SpatIS/code/"
 source(paste(codedir, "spatis_source_code_v1_0.R", sep = ""))
 ```
 
-Then it is necessary to transform individuals' locations into a SpatialPointsDataFrame (basically a data frame with spatial information embedded; take a look [here](https://cran.r-project.org/web/packages/sp/vignettes/intro_sp.pdf) for more information), so that one of the columns indicates the individual ID. Below we show an example of how the space use data may be organized and how it looks like after the transformation into a SpatialPointsDataFrame.
+Then it is necessary to transform individuals' locations into a SpatialPointsDataFrame (a data frame with spatial information embedded; take a look [here](https://cran.r-project.org/web/packages/sp/vignettes/intro_sp.pdf) for more information), so that one of the columns indicates the individual ID. Below we show an example of how the space use data may be organized and how it looks like after the transformation into a SpatialPointsDataFrame.
 
 ``` r
 # Organizing individual locations as an example of tabular data
@@ -276,7 +276,7 @@ for(i in (1:length(ids))) {
   if(i == 1){
     # Draw the virtual landscape
     
-    # draw a landscape that emcompasses the position of all resources
+    # Draw a landscape that emcompasses the position of all resources
     matplot(x.resources, y.resources, type="n", 
             xlim=c(1.2*min(x.resources), 1.2*max(x.resources)),
             ylim=c(1.2*min(y.resources),1.2*max(y.resources)), 
