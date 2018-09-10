@@ -766,8 +766,8 @@ Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. Individual 
 Additional references
 =====================
 
-Bolnick, D. I. et al. 2003. The ecology of individuals: incidence and implications of individual specialization. American Naturalist, 161, 1–28.
+Bolnick, D. I. et al. 2003. [The ecology of individuals: incidence and implications of individual specialization](https://digitalcommons.tacoma.uw.edu/cgi/viewcontent.cgi?referer=https://scholar.google.com.br/&httpsredir=1&article=1563&context=ias_pub). American Naturalist, 161, 1–28.
 
-Calenge, C. 2006. The package adehabitat for the R software: a tool for the analysis of space and habitat use by animals. Ecological Modelling, 197, 516-519.
+Calenge, C. 2006. [The package adehabitat for the R software: a tool for the analysis of space and habitat use by animals](https://ase-research.org/calenge/Calenge_2006.pdf). Ecological Modelling, 197, 516-519.
 
 Prof. Juan Manuel Morales webpage. <https://sites.google.com/site/pajarom/>.
