@@ -54,6 +54,15 @@ use_vs_foraging_sites.long <- reshape(use_vs_foraging_sites, varying = 4:12, v.n
 colnames(use_vs_foraging_sites.long)[4] <- "foraging.site"
 head(use_vs_foraging_sites.long)
 
+# General statistics
+# Body size
+range(10^(use_vs_foraging_sites.long$log.weight))
+mean(10^(use_vs_foraging_sites.long$log.weight)); sd(10^(use_vs_foraging_sites.long$log.weight))
+
+# Use of foraging sites
+range(use_vs_foraging_sites.long$frequency.use)
+mean(use_vs_foraging_sites.long$frequency.use); sd(use_vs_foraging_sites.long$frequency.use)
+
 # Run linear models
 # No effect model
 m0 <- glm(frequency.use ~ 1, data = use_vs_foraging_sites.long)
@@ -108,6 +117,15 @@ colnames(use_vs_poligons.long)
 colnames(use_vs_poligons.long)[4] <- "polygon"
 head(use_vs_poligons.long)
 table(use_vs_poligons.long[4])
+
+# General statistics
+# Body size
+range(10^(use_vs_poligons.long$log.weight))
+mean(10^(use_vs_poligons.long$log.weight)); sd(10^(use_vs_foraging_sites.long$log.weight))
+
+# Use of foraging sites
+range(use_vs_poligons.long$frequency.use)
+mean(use_vs_poligons.long$frequency.use); sd(use_vs_foraging_sites.long$frequency.use)
 
 # Run linear models
 # No effect model
