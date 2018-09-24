@@ -116,7 +116,8 @@ data$second <- ifelse(nchar(as.character(data$when_hour)) == 4, "00", substr(as.
 data$time <- ifelse(is.na(data$hour), NA, paste(data$hour, data$minute, data$second, sep=":"))
 
 # We are going to work with the following data
-data.f <- subset(data, select = c("ID", "x", "y", "date", "julian", "time", "tag_ID"))
+data.f <- subset(data, select = c("ID", "x", "y", "date", "julian", "time", "tag_ID", 
+                                  "position"))
 head(data.f, 30)
 
 # Transforming data into Spatial Points
