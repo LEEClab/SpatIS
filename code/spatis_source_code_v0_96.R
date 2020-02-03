@@ -69,7 +69,7 @@ if(!require(rgdal)) install.packages("rgdal", dep=T); library(rgdal)
 
 # Function SpatIS declaration
 SpatIS <- function(data, individuals.col, population.ID = NULL, 
-                   method = c("VI", "HR", "PHR", "BA", "UDOI", "HD")[1], ...)
+                   method = c("VI", "HR", "PHR", "BA", "UDOI", "HD"), ...)
 {
   # Check if the data are of the class SpatialPoints
   if (!inherits(data, "SpatialPoints")) 
@@ -80,7 +80,7 @@ SpatIS <- function(data, individuals.col, population.ID = NULL,
   data2[[individuals.col]] <- as.character(data2[[individuals.col]])
   
   # Method of overlap
-  #method = method[1]
+  method = method[1]
   
   # If population.ID is NULL, the points representing all the population were not
   #   calculated yet. They will be calculated then.
@@ -231,129 +231,6 @@ t.power.vs.n <- function(n, observed, expected, alpha = 0.05, n.repeat = 100) {
   # list(power.val, mean(power.val))
   # Return the mean power for each sampling size n
   mean(power.val)
-}
-
-################################################################################
-#
-# SpatICS: Spatial Individual Complementary Specialization index
-# 
-# Patricia K. Rogeri - pa_bio04@yahoo.com.br
-# Bernardo B. Niebuhr - bernardo_brandaum@yahoo.com.br
-# Renata L. Muylaert - renatamuy@gmail.com 
-#
-# Function SpatIS, to calculate Individual Specializations considering the use 
-#   of space. The function calculates utilization distributions (UD) for both 
-#   the individuals and the whole population, based on telemetry location points.
-#
-#   The individual SpatIS is calculated as the volume of the individual UD 
-#   (or a X% kernel area, X defined by the user) that do not overlap with the 
-#   populational UD (or a correspondent population kernel area).
-#
-# Call: SpatIS(data, individuals.col, population.ID = NULL, method, ...)
-#
-# Inputs:
-# data:            a SpatialPointsDataFrame object containing the locations of 
-#                  the individuals, their IDs, and other spatial or individual 
-#                  information.
-#
-# individuals.col: name(string) or number of the column of the input 
-#                  SpatialPointsDataFrame 'data' that represents the identity 
-#                  of individuals.
-#
-# population.ID:   ID (string or number) that represents the population in the
-#                  column 'individuals.col' of the input dataset 'data'. In case
-#                  the locations of all individuals were not pooled and combined
-#                  to the original data, population.ID is set to NULL (the default).
-#                  In this case, the calculations for the whole population are
-#                  made inside the SpatIS function.
-#
-# method:          method of overlap between utilization distributions (the same
-#                  options as the function kerneloverlap from adehabitatHR 
-#                  package. See ?kerneloverlap for more information). The default
-#                  is "VI", which computes the volume of the intersection between 
-#                  the individual and populational UD.
-# 
-# ...:             additional arguments passed to the functions kerneloverlap and
-#                  kernelUD, from the package adehabitatHR.
-#
-# Output:
-# A list of four elements:
-# data:              the data used to calculate SpatIS (with locations corresponding
-#                    to the whole population, independently of whether the population
-#                    locations were already in the input data). 
-#                    It is a SpatialPointsDataFrame.
-#
-# parms:             a list with parameters used as input to call SpatIS function.
-#
-# SpatIS.individual: a vector of Spatial individual specialization indices for
-#                    each individual of the population (the overlap between
-#                    each individual and the population UDs).
-#
-# SpatIS.population: a value of Spatial individual specialization for the population,
-#                    calculated as the average of all SpatIS individual values.
-#
-# July 2017
-#
-# License: GPLv2 (GNU General Public License v2.0)
-################################################################################
-
-# Load packages
-if(!require(adehabitatHR)) install.packages("adehabitatHR", dep=T); library(adehabitatHR)
-if(!require(sp)) install.packages("sp", dep=T); library(sp)
-if(!require(rgdal)) install.packages("rgdal", dep=T); library(rgdal)
-
-# Function SpatIS declaration
-SpatICS <- function(data, individuals.col, population.ID = NULL,
-                   method = c("VI", "HR", "PHR", "BA", "UDOI", "HD"), ...)
-{
-  # Check if the data are of the class SpatialPoints
-  if (!inherits(data, "SpatialPoints")) 
-    stop("Data should inherit the class SpatialPoints.")
-  
-  # Copying data and transforming ID values in character variables
-  data2 <- data
-  data2[[individuals.col]] <- as.character(data2[[individuals.col]])
-  
-  # Method of overlap
-  method = method[1]
-  
-  # function to calculate overlap not with the whole population, but with
-  # each individual besides the one in question
-  overlap.remaining.inds <- function(x, indiv, individuals.col, ...) {
-    ind1 <- x[x[[individuals.col]] == indiv,]
-    remaining.inds <- x[x[[individuals.col]] != indiv,]
-    remaining.inds[[individuals.col]] <- "remaining"
-    data.aux <- rbind(ind1, remaining.inds)
-    
-    over <- kerneloverlap(data.aux[,1], method = method, ...)[1,2]
-    return(over)
-  }
-  
-  # If population.ID is not NULL, remove the points that correspond to the population
-  if(!is.null(population.ID)) {
-    # If the population.ID was furnished by the user, check if it really exists in the input data
-    if(!(population.ID %in% unique(data2[[individuals.col]]))) {
-      # If the population.ID does not exist, show an error message
-      stop(paste("The population ID \"",population.ID,"\" is absent from the input data. Plase set the parameter population.ID to NULL.", sep = ""))
-    } else {
-      # If it exists, remove it from the data for this analysis
-      data2 <- data2[data2[[individuals.col]] != population.ID,]
-    }
-  }
-  
-  # Here we calculate, for each individual, the overlap between each individual with the rest of the population
-  all.inds <- sort(unique(data2[[individuals.col]]))
-  over <- sapply(all.inds, overlap.remaining.inds, x = data2, individuals.col = individuals.col, ...)
-  
-  # SpatICS for individuals = 1 - overlap of the individual with the rest of the population
-  SpatICS.ind <- 1 - over
-  # SpatIS = average of individual SpatIS
-  SpatICS.pop <- mean(SpatICS.ind)
-  
-  # List of parameters
-  parms <- list(individuals.col = individuals.col, population.ID = population.ID, method = method, ...)
-  
-  return( list(data = data2, parms = parms, SpatICS.individual = SpatICS.ind, SpatICS.population = SpatICS.pop) )
 }
 
 ################################################################################
