@@ -8,7 +8,7 @@
 #
 # Patricia Rogeri - pa_bio04 at yahoo.com.br
 # Bernardo Niebuhr - bernardo_brandaum at yahoo.com.br
-# Renata Muylaert - remuylaert at gmail.com
+# Renata Muylaert - renatamuy at gmail.com
 #
 # July 2017
 # No copyrights - feel free to use, modify, and share
@@ -74,7 +74,7 @@ m2 <- glm(frequency.use ~ sex + log.weight + ID, data = use_vs_foraging_sites.lo
 m3 <- lmer(frequency.use ~ sex + log.weight + (1|ID), data = use_vs_foraging_sites.long)
 
 # Comparing models
-AICctab(m0, m1, m2, m3, delta = T, weights = T) # Null wins
+AICctab(m0, m1, m2, m3, delta = T, weights = T) # m0 wins
 
 # Summary of models
 summary(m1)
@@ -105,7 +105,7 @@ use_vs_poligons$ID <- as.factor(use_vs_poligons$ID)
 # ID: ID of bat individual
 # sex: sex of the individual
 # log.weight: logarithm of the body size (in grams)
-# FS1-FS31: Arccossine of the square root of the 
+# FS1-FS31: Arcsine of the square root of the 
 #           proportion of use of each habitat type polygon (1-31)
 #           by each individual
 #
