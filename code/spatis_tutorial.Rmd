@@ -3,8 +3,8 @@ title: 'Appendix S3. SpatIS tutorial: calculating Spatial Individual Specializat
 author: Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello,
   M. A. R. Individual specialization in the use of space by frugivorous bats.
 output: 
-  pdf_document: default
-  # github_document
+  # pdf_document: default
+  github_document
   # html_document: default
   #   keep_md: true
 ---
