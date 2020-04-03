@@ -108,7 +108,7 @@ information on the context of these simulated individuals' movement.
 source("spatis_source_code_v1_0.R")
 
 # read data
-dat <- readRDS("inputdata_app1.RDS")
+dat <- readRDS("inputdata_appS3.RDS")
 ```
 
 ### 3.1.1) _SpatIS(HR)_
