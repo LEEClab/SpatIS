@@ -1,5 +1,5 @@
 ---
-title: "Appendix S5. The Spatial Individual Specialization Indices applied to different contexts"
+title: "Appendix S5. Spatial Individual Specialization Indices applied to different contexts"
 author: Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. Individual
   specialization in the use of space by frugivorous bats.
 output:
@@ -18,7 +18,7 @@ Here we create four scenarios and calculate the individual and population *SpatI
 
 ## 1 The typical specialist population: specialist individuals with different UD means and low variation in UD width
 
-This scenario comprises individuals which are specialists in their most visited places (i.e. have different mean UD values) but do not present individual variation in their site fidelity - all individuals have UDs with similar SD, which are small compared to the populational UD standard deviation. Below we simulate and illustrate such a population. The black lines represent the UD of the individuals and the red line the population UD.
+This scenario comprises individuals which are specialists in their most visited places (i.e. have different mean UD values) but do not present individual variation in their site fidelity - all individuals have UDs with similar SD, which are small compared to the populational UD standard deviation. Below we simulate and illustrate such a population. In this and all the examples along this appendix, the black lines represent the UD of the individuals and the red line the population UD.
 
 ```{r specialist_lowvar_illustrate}
 # Specialist individuals, no SD variation
@@ -36,9 +36,9 @@ pop.curve <- function(x, mn, sd) {
   for(i in mn) f <- f + dnorm(x, mean = i, sd = sd)
   f/length(mn)
 }
-# Make dure that it integrates to 1
+# Making sure it integrates to 1
 integrate(pop.curve, lower = -Inf, upper = Inf, mn = avg.specialist.low, 
-          sd = sd.specialist.low) # ok
+          sd = sd.specialist.low)
 
 # Plot
 plot(0, 0, type = "n", xlim = c(-8,8), ylim = c(0, .4),
@@ -68,13 +68,13 @@ spatics <- function(i) {
     lower = -Inf, upper = Inf, md = i)$value 
 }
 
-# calculate spatis
+# calculate SpatIS
 # individual values
 sapply(avg.specialist.low, spatis)
 # populational value
 mean(sapply(avg.specialist.low, spatis))
 
-# calculate spatis
+# calculate SpatICS
 # individual values
 sapply(avg.specialist.low, spatics)
 # populational value
@@ -83,7 +83,7 @@ mean(sapply(avg.specialist.low, spatics))
 
 ## 2 The typical generalist population: generalist individuals with similar UD means and low variation in UD width
 
-This scenario comprises individuals which are generalist in their most visited places (i.e. have mean UD values close to each other) and present very low site fidelity. All individuals have UDs with similar SD, which is large compared to the populational UD standard deviation. Below we simulate and illustrate such a population. The black lines represent the UD of the individuals and the red line the population UD.
+This scenario comprises individuals which are generalist in their most visited places (i.e. have mean UD values close to each other) and present very low site fidelity. All individuals have UDs with similar SD, which is large compared to the populational UD standard deviation. Below we simulate and illustrate such a population.
 
 ```{r generalist_lowvar_illustrate}
 # Generalist individuals, no SD variation
@@ -93,7 +93,7 @@ This scenario comprises individuals which are generalist in their most visited p
 # individual UD mean
 avg.specialist.low <- seq(-1, 1, length.out = 10)
 # individual UD SD
-sd.specialist.low <- 1
+sd.specialist.low <- 3
 
 # Populational UD
 pop.curve <- function(x, mn, sd) {
@@ -101,9 +101,9 @@ pop.curve <- function(x, mn, sd) {
   for(i in mn) f <- f + dnorm(x, mean = i, sd = sd)
   f/length(mn)
 }
-# Make dure that it integrates to 1
+# Making sure it integrates to 1
 integrate(pop.curve, lower = -Inf, upper = Inf, mn = avg.specialist.low, 
-          sd = sd.specialist.low) # ok
+          sd = sd.specialist.low)
 
 # Plot
 plot(0, 0, type = "n", xlim = c(-8,8), ylim = c(0, 0.4),
@@ -114,7 +114,7 @@ curve(pop.curve(x, mn = avg.specialist.low, sd = sd.specialist.low),
       from = -8, to = 8, lwd = 2, lty = 2, col = 2, add = T)
 ```
 
-Both the populational (*SpatIS* = 0.22, *SpatICS* = 0.24) and individual values are relatively low (*SpatIS* in the range [0.09, 0.36], *SpatICS* in the range [0.10, 0.40]), as expected. This indicates a generalist population composed of generalist individuals.
+Both the populational (*SpatIS* = 0.07, *SpatICS* = 0.08) and individual values are low (*SpatIS* in the range [0.017, 0.13], *SpatICS* in the range [0.019, 0.146]), as expected. This indicates a generalist population composed of generalist individuals.
 
 ```{r generalist_lowvar_calculate}
 # declare SpatIS function 
@@ -134,13 +134,13 @@ spatics <- function(i) {
     lower = -Inf, upper = Inf, md = i)$value 
 }
 
-# calculate spatis
+# calculate SpatIS
 # individual values
 sapply(avg.specialist.low, spatis)
 # populational value
 mean(sapply(avg.specialist.low, spatis))
 
-# calculate spatics
+# calculate SpatICS
 # individual values
 sapply(avg.specialist.low, spatics)
 # populational value
@@ -149,7 +149,7 @@ mean(sapply(avg.specialist.low, spatics))
 
 ## 3 In-between: individuals with different UD means and a varying degree of site fidelity
 
-This scenario comprises individuals which are specialists in their most visited places (i.e. have different mean UD values) but do present a gradient of individual variation in their site fidelity - some individuals have UDs with small SD (high site fidelity), while others have UDs with high SD compared to the populational UD standard deviation (low side fidelity). Below we simulate and illustrate such a population. The black lines represent the UD of the individuals and the red line the population UD.
+This scenario comprises individuals which are specialists in their most visited places (i.e. have different mean UD values) but present a gradient of individual variation in their site fidelity - some individuals have UDs with small SD (high site fidelity), while others have UDs with high SD compared to the populational UD standard deviation (low side fidelity). Below we simulate and illustrate such a population.
 
 ```{r specialist_highvar_illustrate}
 # Specialist individuals, high interindividual SD variation
@@ -168,9 +168,9 @@ pop.curve <- function(x, mn, sd) {
   for(i in 1:length(mn)) f <- f + dnorm(x, mean = mn[i], sd = sd[i])
   f/length(mn)
 }
-# Make dure that it integrates to 1
+# Making sure it integrates to 1
 integrate(pop.curve, lower = -Inf, upper = Inf, mn = avg.specialist.low, 
-          sd = sd.specialist.low) # ok
+          sd = sd.specialist.low)
 
 # plot
 plot(0, 0, type = "n", xlim = c(-8,8), ylim = c(0, 1),
@@ -202,13 +202,13 @@ spatics <- function(i, j) {
     lower = -Inf, upper = Inf, md = i, ss = j)$value
 }
  
-# calculate spatis
+# calculate SpatIS
 # individual values
 mapply(spatis, avg.specialist.low, sd.specialist.low)
 # populational value
 mean(mapply(spatis, avg.specialist.low, sd.specialist.low))
 
-# calculate spatics
+# calculate SpatICS
 # individual values
 mapply(spatics, avg.specialist.low, sd.specialist.low)
 # populational value
@@ -217,7 +217,7 @@ mean(mapply(spatics, avg.specialist.low, sd.specialist.low))
 
 ## 4 In-between: individuals with similar UD means but a varying degree of site fidelity
 
-This scenario comprises individuals which are generalist in their most visited places (i.e. have mean UD values close to each other) but do present a gradient of individual variation in their site fidelity - some individuals have UDs with small SD (high site fidelity), while others have UDs with high SD compared to the populational UD standard deviation (low side fidelity). Below we simulate and illustrate such a population. The black lines represent the UD of the individuals and the red line the population UD.
+This scenario comprises individuals which are generalist in their most visited places (i.e. have mean UD values close to each other) but do present a gradient of individual variation in their site fidelity - some individuals have UDs with small SD (high site fidelity), while others have UDs with high SD compared to the populational UD standard deviation (low side fidelity). Below we simulate and illustrate such a population. 
 
 ```{r generalist_highvar_illustrate}
 # Generalist individuals, high interindividual SD variation
@@ -236,9 +236,9 @@ pop.curve <- function(x, mn, sd) {
   for(i in 1:length(mn)) f <- f + dnorm(x, mean = mn[i], sd = sd[i])
   f/length(mn)
 }
-# Make dure that it integrates to 1
+# Making sure it integrates to 1
 integrate(pop.curve, lower = -Inf, upper = Inf, mn = avg.specialist.low, 
-          sd = sd.specialist.low) # ok
+          sd = sd.specialist.low)
 
 # plot
 plot(0, 0, type = "n", xlim = c(-8,8), ylim = c(0, 1),
@@ -251,7 +251,7 @@ curve(pop.curve(x, mn = avg.specialist.low, sd = sd.specialist.low),
       from = -8, to = 8, lwd = 2, lty = 2, add = T, col = 2)
 ```
 
-The populational values of the indexes are relatively low (*SpatIS* = 0.28, *SpatICS* = 0.31), not too above the typical generalist population (section 2), but still indicate some degree of specialization in the population. This is clearer when one observes the individual values: there are individuals that are specialized in some areas (maximum *SpatIS* = 0.61, max. *SpatICS* = 0.68), while others are highly generalists (minimum *SpatIS* = 0.17, min. *SpatICS* = 0.19). This means this population is composed by a mixture of specialist and  generalist individuals, yet is a predominantly generalist population.
+The populational values of the indexes are relatively low (*SpatIS* = 0.28, *SpatICS* = 0.31), not too above the typical generalist population (section 2), but still indicate some degree of specialization in the population. This is clearer when observing the individual values: there are individuals that are specialized in some areas (maximum *SpatIS* = 0.61, max. *SpatICS* = 0.68), while others are highly generalists (minimum *SpatIS* = 0.17, min. *SpatICS* = 0.19). This means this population is composed by a mixture of specialist and  generalist individuals, yet is a predominantly generalist population.
 
 ```{r generalist_highvar_calculate}
 # declare SpatIS function 
@@ -271,13 +271,13 @@ spatics <- function(i, j) {
     lower = -Inf, upper = Inf, md = i, ss = j)$value
 }
 
-# calculate spatis
+# calculate SpatIS
 # individual values
 mapply(spatis, avg.specialist.low, sd.specialist.low)
 # populational value
 mean(mapply(spatis, avg.specialist.low, sd.specialist.low))
 
-# calculate spatics
+# calculate SpatICS
 # individual values
 mapply(spatics, avg.specialist.low, sd.specialist.low)
 # populational value
@@ -286,9 +286,4 @@ mean(mapply(spatics, avg.specialist.low, sd.specialist.low))
 
 # Conclusion
 
-This examples demonstrate the usefulness of the indices of individual specialization in the use of space in different contexts, from the typical populations composed of only generalist or specilist populations to the more realistic populations composed of specialist and generalist individuals. These examples show that it is important to look beyond the population *SpatIS* and *SpatICS* values to characterize the individual specialization in the use of space within a population. The populational values of these indices may be useful to compare populations, but the distribution of individual *SpatIS* ad *SpatICS* values may provide quality to the assessment of individual specialization, since it is possible to understand how different individual specialization strategies are spread within the population. Plotting individual and populational UDs may also be very important to understand qualitatively how individual specialization in the use of space occurs within populations.
-
-**Pessoal, alguma ideia de como terminar aqui? Ou assim esta ok?**
-**O que podemos especular sobre UDs que sigam outras distribuicoes, ou que tenham multiplos locais com alta atividade (distibuicoes multimodais)?**
-
-**Fiquei Pensando se deveriamos incluir um teste em 2d tambem. Poderia fazer algo parecido amostrando pontos de localizacao de distribuicoes Gaussianas bivariadas, variando a media e o SD como aqui, e fazer um teste equivalente... mas daria um pouquinho de trabalho, nao sei se é necessario. O que acham?**
+This examples demonstrate the application of the indices of individual specialization in the use of space in different ecological contexts, from the typical populations composed of only generalist or specilist populations to the more realistic populations composed of specialist and generalist individuals. These examples show that it is important to look beyond the population *SpatIS* and *SpatICS* values to characterize the individual specialization in the use of space within a population. The populational values of these indices may be useful to compare populations, but the distribution of individual *SpatIS* ad *SpatICS* values may provide quality to the assessment of individual specialization, since it is possible to understand how different individual specialization patterns are spread within the population. Plotting individual and populational UDs may also be very important to understand qualitatively how individual specialization in the use of space occurs within populations.

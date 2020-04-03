@@ -271,6 +271,37 @@ randomized.UDOI <- try(SpatIS.randomize(out.list$UDOI, not.randomize.col = "nest
 randomized.UDOI[[2]]$SpatICS.significance
 ```
 
+Pessoal, tb inclui uns plots de correlacao entre os valores individuais de SpatIS e SpatICS. Eh estranho que alguns deles tem correlacao negativa, ao contrario do exposto para o exemplo simulado acima e contrario ao que eu esperaria. Talvez isso tb seja resultado de alguns outliers e de termos poucos pontos.
+Nao sei se devemos manter isso, o que acham?
+
+```{r spatis_plot_correlation}
+library(ggcorrplot)
+
+cor(out[3,1][[1]], out[3,3][[1]])
+
+cormat.spatis <- cor(matrix(unlist(out[3,]), ncol = 3))
+rownames(cormat.spatis) <- colnames(cormat.spatis) <- colnames(out)[1:3]
+ggcorrplot(cormat.spatis, hc.order = FALSE, type = "lower",
+     outline.col = "white", lab = TRUE)
+
+cormat.spatics <- cor(matrix(unlist(out[5,]), ncol = 5))
+rownames(cormat.spatics) <- colnames(cormat.spatics) <- colnames(out)
+ggcorrplot(cormat.spatics, hc.order = FALSE, type = "lower",
+     outline.col = "white", lab = TRUE)
+
+library(GGally)
+
+spatis.mat <- data.frame(matrix(unlist(out[3,]), ncol = 3))
+colnames(spatis.mat) <- colnames(out)[1:3]
+ggpairs(spatis.mat)
+
+spatics.mat <- data.frame(matrix(unlist(out[5,]), ncol = 5))
+colnames(spatics.mat) <- colnames(out)
+ggpairs(spatics.mat)
+
+
+```
+
 # Citation
 
 If you need more information or use *SpatIS* and *SpatICS*, please refer to
