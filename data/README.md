@@ -13,6 +13,9 @@ Below we describe the data files and the columns they contain.
   * time: time of day of the recorded position 
   * position: whether the positions corresponded to the roost, to a horizontal position 
   (flight event), or to a vertical position (animal standing). 
+  
+  The data was collected using UTM reference system, zone 23S, with datum and ellipsoid WGS84.
+  The proj4 code for that is: `"+proj=utm +datum=WGS84 +zone=23 +south +ellps=WGS84 +towgs84=0,0,0"`
 
 - spatis_paper_individual_bat_info.csv: individual data from each bat.
   * Animal_ID: An ID given to each individual bat, its identity
