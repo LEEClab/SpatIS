@@ -4,7 +4,7 @@
 
 Below we describe the data files and the columns they contain.
 
-- spatis_paper_bat_positions.csv: movement data from __Sturnira lilium__ bats from 2009 and 2010.
+- spatis_paper_bat_positions.csv: movement data from _Sturnira lilium_ bats from 2009 and 2010.
   * Tag_ID: The ID of the radio tag attached to animals
   * Animal_ID: An ID given to each individual bat, its identity
   * x: x position (longitude)
