@@ -1,7 +1,6 @@
 ---
 title: "Appendix S5. Spatial Individual Specialization Indices applied to different contexts"
-author: Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. Individual
-  specialization in the use of space by frugivorous bats.
+author: Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. Individual specialization in the use of space by frugivorous bats. Journal of Animal Ecology.
 output:
   pdf_document: default
   html_document:
@@ -10,11 +9,11 @@ output:
 
 # Introduction
 
-To assess how general are the measurements of *SpatIS* and *SpatICS* for different contexts and populations, here we simulate populations in which individuals vary both in their most visited places and in their fidelity to those places. Doing that allows us to simulate both specialist and generalist populations, as well as vary the degree of individual specialization within the populations.
+To assess how general the measurements of *SpatIS* and *SpatICS* are for different contexts and populations, here we simulate populations in which individuals vary both in their most visited places and in their fidelity to those places. Doing that allows us to simulate both specialist and generalist populations, as well as vary the degree of individual specialization within the populations.
 
 For the sake of simplicity, we assume that individual utilization distributions (UDs) are one dimensional (*UD(x)* instead of *UD(x,y)*) and follow a Gaussian distribution. The mean of the UD represents the location (in x) of the most visited place for a given individual, while the standard deviation (SD) of the UD represents their site fidelity (low SD indicates high site fidelity). 
 
-Here we create four scenarios and calculate the individual and population *SpatIS* and *SpatICS* for them. The scenarios are: (i) specialist individuals with different UD means and low between-individual variation in UD width, (ii) generalist individuals with similar UD means and low variation in UD width, (iii) specialist individuals different UD means and with high variation in UD width, and (iv) specialist individuals with similar UD means but high variation in UD width. 
+Here we create four scenarios and calculate the individual and population *SpatIS* and *SpatICS* for them. The scenarios are: (i) specialist individuals with different UD means and low between-individual variation in UD width, (ii) generalist individuals with similar UD means and low variation in UD width, (iii) specialist individuals with different UD means and with high variation in UD width, and (iv) specialist individuals with similar UD means but high variation in UD width. 
 
 ## 1 The typical specialist population: specialist individuals with different UD means and low variation in UD width
 
@@ -182,7 +181,7 @@ curve(pop.curve(x, mn = avg.specialist.low, sd = sd.specialist.low),
       from = -8, ro = 8, lwd = 2, lty = 2, add = T, col = 2)
 ```
 
-The populational values of the indexes are not so high (*SpatIS* = 0.52, *SpatICS* = 0.58) as the case of the typical specialist population (section 1), but still indicate some degree of specialization in the population. This is clearer when one observes the individual values: there are some individuals that are highly specialized in some areas (maximum *SpatIS* = 0.85, max. *SpatICS* = 0.94), while others are generalists (minimum *SpatIS* = 0.36, min. *SpatICS* = 0.42). This means this population is composed by a mixture of specialist and  generalist individuals, yet is a predominantly specialist population.
+The populational values of the indexes are not so high (*SpatIS* = 0.52, *SpatICS* = 0.58) as for the case of a typical specialist population (section 1), but still indicate some degree of specialization in the population. This is clearer when one observes the individual values: there are some individuals that are highly specialized in some areas (maximum *SpatIS* = 0.85, max. *SpatICS* = 0.94), while others are generalists (minimum *SpatIS* = 0.36, min. *SpatICS* = 0.42). This means this population is composed of a mixture of specialist and generalist individuals, yet is predominantly a specialist population.
 
 ```{r specialist_highvar_calculate}
 # declare SpatIS function 
@@ -251,7 +250,7 @@ curve(pop.curve(x, mn = avg.specialist.low, sd = sd.specialist.low),
       from = -8, to = 8, lwd = 2, lty = 2, add = T, col = 2)
 ```
 
-The populational values of the indexes are relatively low (*SpatIS* = 0.28, *SpatICS* = 0.31), not too above the typical generalist population (section 2), but still indicate some degree of specialization in the population. This is clearer when observing the individual values: there are individuals that are specialized in some areas (maximum *SpatIS* = 0.61, max. *SpatICS* = 0.68), while others are highly generalists (minimum *SpatIS* = 0.17, min. *SpatICS* = 0.19). This means this population is composed by a mixture of specialist and  generalist individuals, yet is a predominantly generalist population.
+The populational values of the indexes are relatively low (*SpatIS* = 0.28, *SpatICS* = 0.31) and close to those of a typical generalist population (section 2), but still indicate some degree of specialization in the population. This is clearer when observing the individual values: there are individuals that are specialized in some areas (maximum *SpatIS* = 0.61, max. *SpatICS* = 0.68), while others are highly generalists (minimum *SpatIS* = 0.17, min. *SpatICS* = 0.19). This means this population is composed of a mixture of specialist and generalist individuals, yet is predominantly a generalist population.
 
 ```{r generalist_highvar_calculate}
 # declare SpatIS function 
@@ -286,4 +285,4 @@ mean(mapply(spatics, avg.specialist.low, sd.specialist.low))
 
 # Conclusion
 
-This examples demonstrate the application of the indices of individual specialization in the use of space in different ecological contexts, from the typical populations composed of only generalist or specilist populations to the more realistic populations composed of specialist and generalist individuals. These examples show that it is important to look beyond the population *SpatIS* and *SpatICS* values to characterize the individual specialization in the use of space within a population. The populational values of these indices may be useful to compare populations, but the distribution of individual *SpatIS* ad *SpatICS* values may provide quality to the assessment of individual specialization, since it is possible to understand how different individual specialization patterns are spread within the population. Plotting individual and populational UDs may also be very important to understand qualitatively how individual specialization in the use of space occurs within populations.
+This examples demonstrate the application of the indices of individual specialization in the use of space in different ecological contexts, from the typical populations composed of only generalist or specialist populations to the more realistic populations composed of specialist and generalist individuals. These examples show that it is important to look beyond the population *SpatIS* and *SpatICS* values to characterize the individual specialization in the use of space within a population. The populational values of these indices may be useful to compare populations, but the distribution of individual *SpatIS* ad *SpatICS* values may provide a more in-depth assessment of individual specialization, since it is possible to understand how different individual specialization patterns are spread within the population. Plotting individual and populational UDs may also be very important to understand qualitatively how individual specialization in the use of space occurs within populations.

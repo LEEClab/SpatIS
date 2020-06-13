@@ -1,7 +1,6 @@
 ---
 title: "Appendix S4. Methods to calculate the Spatial Individual Specialization Indices"
-author: Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. Individual
-  specialization in the use of space by frugivorous bats.
+author: Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. Individual specialization in the use of space by frugivorous bats. Journal of Animal Ecology.
 output:
   pdf_document: default
   html_document:
@@ -232,41 +231,65 @@ out.list <- mapply(SpatIS, method = methods, index = index,
               MoreArgs = list(data = spdados, individuals.col = "ID",
                               percent = 99, grid = 200, extent = 1.5),
               SIMPLIFY = F)
+```
 
+```{r spatis_randomize2, results=F}
 # For HR
 randomized.HR <- try(SpatIS.randomize(out.list$HR, not.randomize.col = "nest",
                                   not.randomize.val = 1, iterations = 30))
+```
+
+```{r spatis_randomize3}
 # HR, significance for SpatIS
 #randomized.HR[[1]]$SpatIS.significance
 # HR, significance for SpatICS
 randomized.HR[[2]]$SpatICS.significance
+```
 
+```{r spatis_randomize4, results=F}
 # For PHR
 randomized.PHR <- try(SpatIS.randomize(out.list$PHR, not.randomize.col = "nest",
                                   not.randomize.val = 1, iterations = 30))
+```
+
+```{r spatis_randomize5}
 # PHR, significance for SpatIS
 randomized.PHR[[1]]$SpatIS.significance
 # PHR, significance for SpatICS
 randomized.PHR[[2]]$SpatICS.significance
+```
 
+```{r spatis_randomize6, results=F}
 # For VI
 randomized.VI <- try(SpatIS.randomize(out.list$VI, not.randomize.col = "nest",
                                   not.randomize.val = 1, iterations = 30))
+```
+
+```{r spatis_randomize7}
 # VI, significance for SpatIS
 randomized.VI[[1]]$SpatIS.significance
 # VI, significance for SpatICS
 randomized.VI[[2]]$SpatICS.significance
+```
 
+```{r spatis_randomize8, results=F}
 # For BA
 randomized.BA <- try(SpatIS.randomize(out.list$BA, not.randomize.col = "nest",
                                   not.randomize.val = 1, iterations = 30))
+```
+
+```{r spatis_randomize9}
 # BA, significance for SpatICS
 randomized.BA[[2]]$SpatICS.significance
+```
 
-
+```{r spatis_randomize10, results=F}
 # For UDOI
 randomized.UDOI <- try(SpatIS.randomize(out.list$UDOI, not.randomize.col = "nest",
                                   not.randomize.val = 1, iterations = 30))
+```
+
+```{r spatis_randomize11, results=F}
 # UDOI, significance for SpatICS
 randomized.UDOI[[2]]$SpatICS.significance
 ```
@@ -275,7 +298,7 @@ randomized.UDOI[[2]]$SpatICS.significance
 
 If you need more information or use *SpatIS* and *SpatICS*, please refer to
 
-Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. Individual specialization in the space use of frugivorous bats. *In review.*
+Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. Individual specialization in the space use of frugivorous bats. *Journal of Animal Ecology.*
 
 # Additional references
 

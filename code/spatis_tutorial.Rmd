@@ -1,17 +1,16 @@
 ---
 title: 'Appendix S3. SpatIS tutorial: calculating Spatial Individual Specialization Indices'
-author: Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello,
-  M. A. R. Individual specialization in the use of space by frugivorous bats.
+author: Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. Individual specialization in the use of space by frugivorous bats. Journal of Animal Ecology.
 output: 
-  # pdf_document: default
-  github_document
+  pdf_document: default
+  #github_document
   # html_document: default
   #   keep_md: true
 ---
 
 # 1 Introduction
 
-Individuals naturallu differ from each other within populations. These differences manifest in their physiology, morphology, as well as in their behavior and preferences. To investigate the causes and consequences of interindividual variation, Bolnick et al. [(2003)](http://www.journals.uchicago.edu/doi/abs/10.1086/343878) have related that with niche theory and coined the term "individual specialization". According to this concept, a specialist individual would be one whose niche is much narrower than the niche of the population it is part of. As a consequence, to be considered generalist a population can follow different scenarios: to be composed by generalist individuals with similar niches, by specialists individuals with distinct niches, or by a gradient between these extremes.
+Individuals naturally differ from each other within populations. These differences manifest in their physiology, morphology, as well as in their behavior and preferences. To investigate the causes and consequences of interindividual variation, Bolnick et al. [(2003)](http://www.journals.uchicago.edu/doi/abs/10.1086/343878) have related that with niche theory and coined the term "individual specialization". According to this concept, a specialist individual would be one whose niche is much narrower than the niche of the population it is part of. As a consequence, to be considered generalist a population can follow different scenarios: to be composed by generalist individuals with similar niches, by specialists individuals with distinct niches, or by a gradient between these extremes.
 
 In this context, the niche is generally represented by the type and amount of food items or other resources that are consumed by individuals. As resources are heterogeneously distributed in space along different habitats, it is expected that individual specialization leaves its shadow over space, or even that different environments or geographical space itself may be viewed as resources, so that individuals may be more or less specialists regarding their movement patterns, habitat selection, and use of space.
 
@@ -346,7 +345,7 @@ str(permutations, max.level = 2)
 
 If you need more information or calculate *SpatIS* and *SpatICS*, please refer to
 
-Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. Individual specialization in the space use of frugivorous bats. *In review.*
+Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. Individual specialization in the space use of frugivorous bats. *Journal of Animal Ecology.*
 
 # Additional references
 
