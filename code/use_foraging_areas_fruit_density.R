@@ -59,7 +59,7 @@ use.density %>%
 g1 <- use.density %>% 
   dplyr::filter(!(density == 80 & !(Animal_ID %in% c(4, 5)))) %>% 
   ggplot(aes(x = density, y = success, color = plant)) +
-  facet_wrap(~Animal_ID, scales = "free") +
+  facet_wrap(~Animal_ID, scales = "free", ncol = 2) +
   geom_point() + 
   theme_bw() +
   labs(x = "Fruit density",
@@ -70,7 +70,7 @@ g1 <- use.density %>%
 g1
 
 ggsave("use_density_plots.png", plot = g1, path = "output", 
-       width = 20, height = 13, units = "cm", dpi = 600)
+       width = 15, height = 20, units = "cm", dpi = 600)
 
 # fit
 
