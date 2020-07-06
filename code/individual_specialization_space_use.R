@@ -307,7 +307,7 @@ props.areas <- points.areas.long %>%
   )
 props.areas
 
-write.csv(props, file = "data/proportion_use_foraging_sites.csv", row.names = F)
+write.csv(props.areas, file = "data/proportion_use_foraging_sites.csv", row.names = F)
 
 ###########################
 # Plotting the network
@@ -386,7 +386,7 @@ dev.off()
 
 ##########################################
 # 3)  Assessing individual specialization using overlap between areas of use
-#     (uilization distributions)
+#     (utilization distributions)
 ##########################################
 
 ##########################
@@ -419,20 +419,20 @@ for(i in 1:length(ids)) { ## plot all curves with 2 seconds interval
   Sys.sleep(1)
 }
 
-# To save all plots
+# To save each plot
 # for(i in 1:length(ids)){
 #   jpeg(paste("Cumulative_", ids[i], ".jpg", sep=""), width=20, height=20, units="cm", res = 300)
 #   plot(cumHRmcp[[i]]$hr ~ cumHRmcp[[i]]$ss, cex=0.5, pch=16, main=ids[i],
-#        xlab="Number of locations",ylab="MCP 100% area (ha)" )
+#        xlab="Number of locations",ylab="MCP 95% area (ha)" )
 #   points(cumHRmcp[[i]]$hr ~ cumHRmcp[[i]]$ss, type="l", lwd=0.7, lty=2)
-#   dev.off() 
+#   dev.off()
 # }
 
-# Plot for each individual
+# Plot for each individual (removing the 11th which did not reach an asymptote)
 png('output/accumulation_curves_MCP.png', width = 15, height = 15, units = 'cm', res = 600)
 par(mfrow = c(4,3), mar = c(2,3,3,1) + 0.1, oma = c(3, 3, 0, 0))
 for(i in 1:length(ids)){ ## plot all curves with 2 seconds interval
-  if(i != 6) {
+  if(i != 11) {
     ind_num <- ifelse(i < 6, i, i-1)
     plot(cumHRmcp[[i]]$hr ~ cumHRmcp[[i]]$ss, cex=0.5, pch=16, main=ids[i],
          xlab="Number of locations",ylab="MCP 95% area (ha)" )
