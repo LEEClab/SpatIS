@@ -7,7 +7,7 @@
 # Bernardo Niebuhr - bernardo_brandaum at yahoo.com.br
 # Renata Muylaert - remuylaert at gmail.com
 #
-# Feb 2020
+# Jun 2020
 # No copyrights - feel free to use, modify, and share
 #######################################################
 
@@ -16,7 +16,7 @@
 ##########################################
 
 # Loading pacakges
-if(!require(adehabitatLT)) install.packages("adehabitatLT", dep=T); library(adehabitatLT)
+if(!require(tidyverse)) install.packages("tidyverse", dep=T); library(tidyverse)
 if(!require(date)) install.packages("date", dep=T); library(date)
 if(!require(adehabitatHR)) install.packages("adehabitatHR", dep=T); library(adehabitatHR)
 if(!require(sp)) install.packages("sp", dep=T); library(sp)
@@ -28,8 +28,7 @@ if(!require(bipartite)) install.packages("bipartite", dep=T); library(bipartite)
 if(!require(colortools)) install.packages("colortools", dep=T); library(colortools)
 if(!require(igraph)) install.packages("igraph", dep=T); library(igraph)
 
-# Loading function to load Google Maps images
-# Functions built by Luiz Gustavo Oliveira-Santos and Carlos Andre Zucco
+# Loading function to calculate SpatIS and SpatICS
 # Change to the folder where he code is located
 source("code/spatis_source_code_v1_0.R")
 
@@ -43,71 +42,17 @@ landuse.map <- spTransform(landuse.map, CRS("+proj=utm +datum=WGS84 +zone=23 +so
 resource.areas <- readOGR("data/map_area", layer = "resource_areas_wgs84_utm23S")
 resource.areas <- spTransform(resource.areas, CRS("+proj=utm +datum=WGS84 +zone=23 +south +ellps=WGS84 +towgs84=0,0,0"))
 
+# Load bat information
+info <- read.table("data/spatis_paper_individual_bat_info.csv", header= T, sep = ",")
+
 # Load bat locations
-data_ini <- read.table("data/bat_locations_ufscar_VHF.csv", header = T, sep = "\t", dec = ",")
-data <- subset(data_ini) # We are not going to consider individuals 33 and 37
-colnames(data) <- c("ID", "when_day", "when_hour", "x", "y", "position")
-head(data,20)
-str(data)
-
-# Change from the VHF tag ID to the individual ID
-n <- length(unique(data$ID))
-data$tag_ID <- data$ID
-indivs <- 1:n
-data$ID <- ifelse(indivs < 10, paste(0, indivs, sep = ""), indivs)[as.factor(data$ID)]
-
-#######################################
-# Description of the data
-# 
-# ID: ID of bat individual
-# when: day when the location was sampled, in the format ddmmYY
-# hour: time of the day of the location, in the format hhmm
-# x: longitude position, in UTM projection, zone 23S, datum WGS 84
-# y: latitude position, in UTM projection, zone 23S, datum WGS 84
-# position: whether the position of the animal was horizontal (H, flying), 
-#           vertical (V, perched), and A (beginning of the movement)
-# tag_ID: ID of the VHF tag used in the individual
-#
-#######################################
-
-##########################
-# Organizing data
-
-# Coordinates
-data$x <- round(data$x, 0)
-data$y <- round(data$y, 0)
-
-# Date
-data$day <- ifelse(nchar(as.character(data$when_day)) == 5, paste("0", substr(as.character(data$when_day), 1,1), sep = ""), 
-                   substr(as.character(data$when_day), 1,2))
-data$month <- ifelse(nchar(as.character(data$when_day)) == 5, substr(as.character(data$when_day), 2,3), 
-                     substr(as.character(data$when_day), 3,4))
-data$year <- as.integer(ifelse(nchar(as.character(data$when_day)) == 5, substr(as.character(data$when_day), 4,5), 
-                     substr(as.character(data$when_day), 5,6)))
-data$year <- ifelse(data$year < 2000, 2000 + data$year, data$year)
-
-# Date reorganized
-data$date <- paste(data$year, data$month, data$day, sep="-")
-# Julian day
-data$julian <- mdy.date(as.numeric(data$month), as.numeric(data$day), data$year)
-
-# Time of the day
-data$hour <- substr(as.character(data$when_hour), 1,2)
-data$minute <- substr(as.character(data$when_hour), 3,4)
-data$second <- ifelse(nchar(as.character(data$when_hour)) == 4, "00", substr(as.character(data$when_hour), 5,6))
-
-data$time <- ifelse(is.na(data$hour), NA, paste(data$hour, data$minute, data$second, sep=":"))
-
-# We are going to work with the following data
-data.f <- subset(data, select = c("ID", "x", "y", "date", "julian", "time", "tag_ID", 
-                                  "position"))
-head(data.f, 30)
+data.f <- read.table("data/spatis_paper_bat_positions.csv", header = T, sep = ",")
 
 # Transforming data into Spatial Points
 time <- as.POSIXct(paste(data.f$date, data.f$time), format="%Y-%m-%d %H:%M:%S")
-spdados <- SpatialPointsDataFrame(data.f[,c(2,3)], data = data.f[,c(1,4:6)],
+spdados <- SpatialPointsDataFrame(data.f[,c(3,4)], data = data.f[,c(1, 2, 4:6)],
                                   proj4string=CRS("+proj=utm +datum=WGS84 +zone=23 +south +ellps=WGS84 +towgs84=0,0,0"))
-spdados <- spdados[order(spdados$ID, time),]  ### order data chronologically
+spdados <- spdados[order(spdados$Animal_ID, time),]  ### order data chronologically
 
 ##########################
 # Extracting map information for each location
@@ -123,20 +68,20 @@ spdados$resource_area <- areavalues$ID
 # Visualizing data
 
 # Checking location of data
-ids <- unique(data.f$ID)
-(n <- length(unique(data.f$ID))) # number of individuals
+ids <- unique(spdados$Animal_ID)
+(n <- length(unique(data.f$Animal_ID))) # number of individuals
 cor <- rainbow(n)
 
 # No background
 plot(data.f$x, data.f$y, type = "n",
      ylab = 'y', xlab = 'x')
-points(spdados, pch = 20, col = cor[as.factor(spdados$ID)])
+points(spdados, pch = 20, col = cor[as.factor(spdados$Animal_ID)])
 
 # One at a time
 for(i in 1:n){
   plot(data.f$x, data.f$y, type = "n",
        ylab = 'y', xlab = 'x')
-  points(spdados[spdados$ID == ids[i],], pch = 20, col = cor[i])
+  points(spdados[spdados$Animal_ID == ids[i],], pch = 20, col = cor[i])
   mtext(paste("ID = ", ids[i], sep = ""), side = 3, line = -1)
   Sys.sleep(1)
 }
@@ -149,20 +94,20 @@ rgb255 <- function(r, g, b) rgb(r, g, b, maxColorValue = 255)
 cols <- c(rgb255(103, 100, 107), rgb255(73, 70, 77), rgb255(130, 130, 130), 
           rgb255(225, 225, 225), rgb255(178, 178, 178), rgb255(204, 204, 204))
 plot(landuse.map, col = cols)
-points(spdados, pch = 20, col = cor[as.factor(spdados$ID)])
+points(spdados, pch = 20, col = cor[as.factor(spdados$Animal_ID)])
 
 # One at a time
 for(i in 1:n){
   # plot(landuse.map, col = grey.colors(nclass)[landuse.map$Class])
   plot(landuse.map, col = cols)
-  points(spdados[spdados$ID == ids[i],], pch = 20, col = cor[i])
+  points(spdados[spdados$Animal_ID == ids[i],], pch = 20, col = cor[i])
   mtext(paste("ID = ", ids[i], sep = ""), side = 3, line = 1)
   Sys.sleep(1)
 }
 
 # With resource areas as background
 plot(resource.areas, border = "red", lwd = 2)
-points(spdados, pch = 20, col = cor[as.factor(spdados$ID)])
+points(spdados, pch = 20, col = cor[as.factor(spdados$Animal_ID)])
 
 # With land use map and foraging areas as background
 # With land use map as background
@@ -173,7 +118,7 @@ rgb255 <- function(r, g, b) rgb(r, g, b, maxColorValue = 255)
 cols <- c(rgb255(103, 100, 107), rgb255(73, 70, 77), rgb255(130, 130, 130), 
           rgb255(225, 225, 225), rgb255(178, 178, 178), rgb255(204, 204, 204))
 plot(landuse.map, col = cols, border = cols, lwd = 0.1)
-points(spdados, pch = 20, col = cor[as.factor(spdados$ID)])
+points(spdados, pch = 20, col = cor[as.factor(spdados$Animal_ID)])
 plot(resource.areas, border = "red", lwd = 2, add = T)
 
 
@@ -182,26 +127,27 @@ plot(resource.areas, border = "red", lwd = 2, add = T)
 #     land use classes as resources
 ##########################################
 
-# Removing individual 06 (since the its home range did not reach stability - see below)
-spdados.ud <- spdados[spdados$ID != "06",]
-# Re-numbering individuals
-spdados.ud$ID <- c(1:length(unique(spdados.ud$ID)))[as.factor(spdados.ud$ID)]
-spdados.ud$ID <- ifelse(spdados.ud$ID < 10, paste(0, spdados.ud$ID, sep = ""), spdados.ud$ID)
+# Removing individual 11 (Tag_ID == 49) 
+# (since the its home range did not reach stability - see below)
+spdados.ud <- spdados[spdados$Animal_ID != 11,]
 
 # Compare old and new numeric codes
-table(spdados$ID)
-table(spdados.ud$ID)
+table(spdados$Animal_ID)
+table(spdados.ud$Animal_ID)
 
 ##########################
 # Calculating points por individual and polygon and organizing it as a network
 
 # Aggregating number of points per individual per polygon
-points.polygons.long <- aggregate(rep(1, nrow(spdados.ud)), by = list(ID = spdados.ud$ID, polygon = spdados.ud$polygon_ID), FUN = sum)
+points.polygons.long <- aggregate(rep(1, nrow(spdados.ud)), 
+                                  by = list(Animal_ID = spdados.ud$Animal_ID, polygon = spdados.ud$polygon_ID), 
+                                  FUN = sum)
 
 # Transforming it into a matrix (network)
-points.polygons.wide <- reshape(points.polygons.long, timevar = "polygon", idvar = "ID", direction = "wide")
-points.polygons.wide <- points.polygons.wide[order(points.polygons.wide$ID),]
-rownames(points.polygons.wide) <- points.polygons.wide$ID
+points.polygons.wide <- reshape(points.polygons.long, timevar = "polygon", 
+                                idvar = "Animal_ID", direction = "wide")
+points.polygons.wide <- points.polygons.wide[order(points.polygons.wide$Animal_ID),]
+rownames(points.polygons.wide) <- points.polygons.wide$Animal_ID
 points.polygons.wide <- points.polygons.wide[-1]
 
 colnames(points.polygons.wide) <- substr(colnames(points.polygons.wide), 3,5)
@@ -226,6 +172,21 @@ write.table(points.polygons.wide, "output/network_matrix_npoints_ids_polygons_HE
 write.table(points.polygons.wide, "output/network_matrix_npoints_ids_polygons_NOHEADER.txt", sep = "\t", row.names = T, col.names = F, quote = F)
 write.table(freq.polygons.wide, "output/network_matrix_freqpoints_ids_polygons_HEADER.txt", sep = "\t", row.names = T, col.names = T, quote = F)
 write.table(freq.polygons.wide, "output/network_matrix_freqpoints_ids_polygons_NOHEADER.txt", sep = "\t", row.names = T, col.names = F, quote = F)
+
+# return to the long version to calculate proportion of use of each site by each individual,
+# with no arcsin sqrt transformation
+props <- points.polygons.long %>% 
+  dplyr::rename(success = x) %>% 
+  dplyr::arrange(Animal_ID) %>% 
+  dplyr::group_by(Animal_ID) %>% 
+  dplyr::mutate(sample.size = sum(success),
+                failure = sample.size - success) %>% 
+  dplyr::left_join(
+    dplyr::select(info, Animal_ID, sex, body_mass_g)
+  )
+props
+
+write.csv(props, file = "data/proportion_use_landcover_polygons.csv", row.names = F)
 
 ###########################
 # Plotting the network
@@ -302,12 +263,12 @@ dev.off()
 # Calculating points por individual and polygon and organizing it as a network
 
 # Aggregating number of points per individual per polygon
-points.areas.long <- aggregate(rep(1, nrow(spdados.ud)), by = list(ID = spdados.ud$ID, area = spdados.ud$resource_area), FUN = sum)
+points.areas.long <- aggregate(rep(1, nrow(spdados.ud)), by = list(Animal_ID = spdados.ud$Animal_ID, area = spdados.ud$resource_area), FUN = sum)
 
 # Transforming it into a matrix (network)
-points.areas.wide <- reshape(points.areas.long, timevar = "area", idvar = "ID", direction = "wide")
-points.areas.wide <- points.areas.wide[order(points.areas.wide$ID),]
-rownames(points.areas.wide) <- points.areas.wide$ID
+points.areas.wide <- reshape(points.areas.long, timevar = "area", idvar = "Animal_ID", direction = "wide")
+points.areas.wide <- points.areas.wide[order(points.areas.wide$Animal_ID),]
+rownames(points.areas.wide) <- points.areas.wide$Animal_ID
 points.areas.wide <- points.areas.wide[-1]
 
 colnames(points.areas.wide) <- substr(colnames(points.areas.wide), 3,5)
@@ -332,6 +293,21 @@ write.table(points.areas.wide, "output/network_matrix_npoints_ids_areas_HEADER.t
 write.table(points.areas.wide, "output/network_matrix_npoints_ids_areas_NOHEADER.txt", sep = "\t", row.names = T, col.names = F, quote = F)
 write.table(freq.areas.wide, "output/network_matrix_freqpoints_ids_areas_HEADER.txt", sep = "\t", row.names = T, col.names = T, quote = F)
 write.table(freq.areas.wide, "output/network_matrix_freqpoints_ids_areas_NOHEADER.txt", sep = "\t", row.names = T, col.names = F, quote = F)
+
+# return to the long version to calculate proportion of use of each site by each individual,
+# with no arcsin sqrt transformation
+props.areas <- points.areas.long %>% 
+  dplyr::rename(success = x) %>% 
+  dplyr::arrange(Animal_ID) %>% 
+  dplyr::group_by(Animal_ID) %>% 
+  dplyr::mutate(sample.size = sum(success),
+                failure = sample.size - success) %>% 
+  dplyr::left_join(
+    dplyr::select(info, Animal_ID, sex, body_mass_g)
+  )
+props.areas
+
+write.csv(props.areas, file = "data/proportion_use_foraging_sites.csv", row.names = F)
 
 ###########################
 # Plotting the network
@@ -410,19 +386,19 @@ dev.off()
 
 ##########################################
 # 3)  Assessing individual specialization using overlap between areas of use
-#     (uilization distributions)
+#     (utilization distributions)
 ##########################################
 
 ##########################
 # Accumulation curves - to check for sampling sufficiency
 
-ids <- unique(spdados$ID)
+ids <- unique(spdados$Animal_ID)
 
-### MCP 100%
+### MCP 95%
 ### Parameters to control
 cumHRmcp <- list() ## List with cumulative sample size for all individuals
 for(i in 1:length(ids)){  ## loop for individuals
-  temp <- spdados[which(spdados$ID == ids[i]),]
+  temp <- spdados[which(spdados$Animal_ID == ids[i]),]
   temp <- SpatialPoints(coordinates(temp), CRS(proj4string(spdados)))
   cumulative <- vector()
   for(k in 5:length(temp)){  ##loop for sample size from 5 locations to all locations
@@ -443,20 +419,20 @@ for(i in 1:length(ids)) { ## plot all curves with 2 seconds interval
   Sys.sleep(1)
 }
 
-# To save all plots
+# To save each plot
 # for(i in 1:length(ids)){
 #   jpeg(paste("Cumulative_", ids[i], ".jpg", sep=""), width=20, height=20, units="cm", res = 300)
 #   plot(cumHRmcp[[i]]$hr ~ cumHRmcp[[i]]$ss, cex=0.5, pch=16, main=ids[i],
-#        xlab="Number of locations",ylab="MCP 100% area (ha)" )
+#        xlab="Number of locations",ylab="MCP 95% area (ha)" )
 #   points(cumHRmcp[[i]]$hr ~ cumHRmcp[[i]]$ss, type="l", lwd=0.7, lty=2)
-#   dev.off() 
+#   dev.off()
 # }
 
-# Plot for each individual
+# Plot for each individual (removing the 11th which did not reach an asymptote)
 png('output/accumulation_curves_MCP.png', width = 15, height = 15, units = 'cm', res = 600)
 par(mfrow = c(4,3), mar = c(2,3,3,1) + 0.1, oma = c(3, 3, 0, 0))
 for(i in 1:length(ids)){ ## plot all curves with 2 seconds interval
-  if(i != 6) {
+  if(i != 11) {
     ind_num <- ifelse(i < 6, i, i-1)
     plot(cumHRmcp[[i]]$hr ~ cumHRmcp[[i]]$ss, cex=0.5, pch=16, main=ids[i],
          xlab="Number of locations",ylab="MCP 95% area (ha)" )
@@ -478,7 +454,7 @@ cumHRkde <- list() ## List with cumulative sample size for all individuous
 pb<-tkProgressBar(max=length(ids))
 for(i in 1:length(ids)){  ## loop for individuals
   setTkProgressBar(pb, value=i, title="Kernel Estimation Progress", label=paste("Estimating",ids[i]))
-  temp <- spdados[which(spdados$ID == ids[i]),]
+  temp <- spdados[which(spdados$Animal_ID == ids[i]),]
   temp <- SpatialPoints(coordinates(temp), CRS(proj4string(spdados)))
   cumulative <- vector()
   for(k in 5:length(temp)){    			## loop for sample size from 5 locations to all locations
@@ -517,51 +493,53 @@ mtext(text = "Space use area (99% KDE, in ha)", side = 2, outer = T, line = 1)
 
 dev.off()
 
+# test with KDE
+iterations <- 20
 
-#-----------------------
-# Doing the same using the package ctmm
-# To do
+### KDE 95%
+### Parameters to control
+KDE_percentage <- 95
+cumHRkde <- list() ## List with cumulative sample size for all individuals
+for (i in 1:length(ids)) {  ## loop for individuals
+  print(i)
+  cumHRkde[[i]] <- list()
+  for(j in 1:iterations) { # Loop for iterations
+    temp <- spdados[which(spdados$Animal_ID == ids[i]),]
+    # Here we do not use the points as they are, but randomize their order
+    temp <- SpatialPoints(coordinates(temp)[sample(length(temp)),], CRS(proj4string(spdados)))
+    cumulative <- vector()
+    for(k in 5:length(temp)){  ##loop for sample size from 5 locations to all locations
+      UD <- kernelUD(temp[1:k,])
+      cumulative[k] <- kernel.area(UD, percent = KDE_percentage)
+    }  
+    cumulative <- cumulative[5:length(cumulative)]
+    cumHRkde[[i]][[j]] <- data.frame(hr = unlist(cumulative), ssize = 5:length(temp))
+  }
+}
 
-# datetime.char <- paste(spdados$date, spdados$time)
-# datetime.char2 <- datetime.char[!grepl(pattern = 'NA', datetime.char)]
-# datetime <- as.POSIXct(datetime.char2, format = '%Y-%m-%d %H:%M:%S')
-# 
-# spdados2 <- spdados[!grepl(pattern = 'NA', datetime.char),]
-# 
-# spdados3 <- spdados2[!duplicated(datetime),]
-# datetime <- datetime[!duplicated(datetime)]
-# coords <- coordinates(spdados3)
-# 
-# move.data <- move(x = as.numeric(coords[,1]), y = as.numeric(coords[,2]), 
-#                   time = datetime, 
-#                   proj = CRS('+proj=utm +datum=WGS84 +zone=23 +south +ellps=WGS84 +towgs84=0,0,0'),
-#                   data = spdados3@data, animal = spdados3$ID, sensor = 'VHF')
-# 
-# move.data@idData$Tag_ID <- move.data@idData$ID
-# mov.tel <- as.telemetry(move.data, projection = '+proj=utm +datum=WGS84 +zone=23 +south +ellps=WGS84 +towgs84=0,0,0')
-# str(mov.tel)
-# plot(mov.tel, col = rainbow(11))
-# 
-# for(i in 1:length(mov.tel)) {
-#   ind <- mov.tel[[i]]
-#   SVF <- variogram(ind)
-#   level <- c(0.5,0.95) # 50% and 95% CIs
-#   # xlim <- c(0, 5 %#% "day") # 0-5 day window
-#   xlim <- c(0, 12 %#% "hour") # 0-12 hour window
-#   par(mfrow = c(1,2))
-#   plot(SVF, xlim=xlim, level=level)
-#   title(ind@info$identity)
-#   plot(SVF, fraction = 0.5, level=level)
-#   Sys.sleep(1)
-# }
+names(cumHRkde) <- ids
+cumHRkde
 
-# INDIVIDUAL ID = 06 (tag_ID = 49) DID NOT REACH STABILITY ON ITS AREA OF USE - WE ARE GOING TO EXCLUDE IT FROM THE SPACE USE ANALYSES
+# Plotting
+par(mar = c(5, 4, 4, 2) + 0.1)
+# Seeing cummulative kde area plots
+for(i in 1:length(ids)) { ## plot all curves with 2 seconds interval
+  cum.df <- as.data.frame(cumHRkde[[i]])
+  cumHR.df.mult <- cum.df[,c(2,seq(1, ncol(cum.df), 2))]
+  
+  cumHR.df.mult2 <- data.frame(npoins = rep(cumHR.df.mult[,1], iterations), HR = unlist(c(cumHR.df.mult[,2:ncol(cumHR.df.mult)])))
+  plot(cumHR.df.mult2$npoins, cumHR.df.mult2$HR, cex=0.5, pch=16, col = 'grey', main=ids[i],
+       xlab = "Number of locations",ylab = paste0("KDE ", KDE_percentage, "% area (ha)"))
+  points(unique(cumHR.df.mult2$npoins), apply(cumHR.df.mult[,2:ncol(cumHR.df.mult)], MARGIN = 1, FUN = median), type="l", lwd=3, lty=1)
+  
+  Sys.sleep(1)
+}
 
-# Removing individual 06 (since the its home range did not reach stability - see below)
-spdados.ud <- spdados[spdados$ID != "06",]
-# Re-numbering individuals
-spdados.ud$ID <- c(1:length(unique(spdados.ud$ID)))[as.factor(spdados.ud$ID)]
-spdados.ud$ID <- ifelse(spdados.ud$ID < 10, paste(0, spdados.ud$ID, sep = ""), spdados.ud$ID)
+# INDIVIDUAL ID = 11 (tag_ID = 49) DID NOT REACH STABILITY ON ITS AREA OF USE - WE ARE GOING TO EXCLUDE IT FROM THE SPACE USE ANALYSES
+
+# Removing individual 11 (since the its home range did not reach stability - see below)
+spdados.ud <- spdados[spdados$Animal_ID != 11,]
+spdados.ud <- spdados.ud[order(spdados.ud$Animal_ID),]
 
 # Save object
 saveRDS(spdados.ud, file = "code/bat_spdados.RDS")
@@ -571,20 +549,20 @@ saveRDS(spdados.ud, file = "code/bat_spdados.RDS")
 
 # Gathering all points to represent the population
 pop <- spdados.ud
-pop$ID <- "all" # ID all represents all population points
+pop$Animal_ID <- "all" # ID all represents all population points
 spdados.ud <- rbind(spdados.ud, pop)
 
-ids <- unique(spdados.ud$ID)
+ids <- unique(spdados.ud$Animal_ID)
 
 # MCP
 
 # MCP values
-cpi <- mcp(spdados.ud[,1], percent=95)
-areas <- mcp.area(spdados.ud[,1], percent=95, plotit = F)
+cpi <- mcp(spdados.ud[, "Animal_ID"], percent = 95)
+areas <- mcp.area(spdados.ud[, "Animal_ID"], percent = 95, plotit = F)
 cpi
 summary(cpi)
 
-plot(1:length(areas), areas, axes = F)
+plot(1:length(areas), areas, axes = F, xlab = "", ylab = "")
 axis(2)
 mtext("Area of use (MPC 95%, ha)", side = 2, line = 2)
 axis(1, at = 1:11, names(areas))
@@ -609,18 +587,18 @@ cols <- c(rgb255(103, 100, 107), rgb255(73, 70, 77), rgb255(130, 130, 130),
 plot(landuse.map, col = cols)
 for(i in 1:length(areas)) {
   cp_id <- cpi[as.data.frame(cpi)[,1] == ids[i],]
-  if(ids[i] != "all") points(spdados.ud[spdados.ud$ID == ids[i],], pch = 20, cex = 0.7, col = cor[i]) # points
+  if(ids[i] != "all") points(spdados.ud[spdados.ud$Animal_ID == ids[i],], pch = 20, cex = 0.7, col = cor[i]) # points
   plot(cp_id, add = T, lwd = 2, border = cor[i]) # polygons
 }
 
 # Fixed Kernel
-ids <- unique(spdados.ud$ID)
+ids <- unique(spdados.ud$Animal_ID)
 kernels <- list()
 for(i in 1:length(ids)) {
-  kudl <- adehabitatHR::kernelUD(spdados.ud[,1][spdados.ud$ID == ids[i],], h = "href")
+  kudl <- adehabitatHR::kernelUD(spdados.ud[, "Animal_ID"][spdados.ud$Animal_ID == ids[i],], h = "href")
   h = kudl[[1]]@h$h
   print(h)
-  kudl <- adehabitatHR::kernelUD(spdados.ud[,1][spdados.ud$ID == ids[i],], h = 1*h, extent = 1.5, grid = 100)
+  kudl <- adehabitatHR::kernelUD(spdados.ud[, "Animal_ID"][spdados.ud$Animal_ID == ids[i],], h = 1*h, extent = 1.5, grid = 100)
   kernels[[i]] <- kudl
 }
 
@@ -676,7 +654,7 @@ for(i in 1:length(homeranges)) {
 
 
 # Export activity points
-rgdal::writeOGR(spdados.ud[spdados.ud$ID != "all",-3], dsn = "output", layer = 'bat_locations', driver = "ESRI Shapefile")
+rgdal::writeOGR(spdados.ud[spdados.ud$Animal_ID != "all",-3], dsn = "output", layer = 'bat_locations', driver = "ESRI Shapefile")
 
 # Export kernel 50%
 tiff("output/Fig_S1_kernel50.tif", width = 15, height = 15, units = "cm", res = 300)
@@ -710,7 +688,7 @@ write.table(area.use.vals, "output/area_of_use_vals.txt", sep = "\t", row.names 
 # Calculating the spatial use overlap
 # SpatIS - Spatial individual specialization
 
-calculated.spatis <- SpatIS(spdados.ud, individuals.col = "ID", 
+calculated.spatis <- SpatIS(spdados.ud, individuals.col = "Animal_ID", 
                             population.ID = "all", grid = 200, extent = 1.5)
 
 # calculated.spatics <- SpatICS(spdados.ud, individuals.col = "ID", population.ID = "all", grid = 200, extent = 1.5)
@@ -747,7 +725,7 @@ randomized$SpatIS.power
 randomized$SpatIS.power.curve
 
 # keeping the nest
-spdados2 <- spdados.ud[,1][spdados.ud$ID != "all",]
+spdados2 <- spdados.ud[, "Animal_ID"][spdados.ud$Animal_ID != "all",]
 
 nest.coords <- c(203441, 7567795)
 home_size <- 60 # in meters
@@ -755,7 +733,7 @@ lines <- which(sqrt((coordinates(spdados2)[,1] - nest.coords[1])**2) < home_size
 spdados2$nest <- 0
 spdados2$nest[lines] <- 1
 
-calculated.spatis2 <- SpatIS(spdados2, individuals.col = "ID", 
+calculated.spatis2 <- SpatIS(spdados2, individuals.col = "Animal_ID", 
                              population.ID = NULL, grid = 200, extent = 1.5)
 randomized.nest <- SpatIS.randomize(calculated.spatis2, iterations = 1000, 
                                     not.randomize.col = "nest", not.randomize.val = 1)
@@ -766,129 +744,6 @@ randomized.nest[[1]]$SpatIS.population.random %>% mean
 # SpatICS
 randomized.nest[[2]]$SpatICS.population.random %>% mean
 randomized.nest[[2]]$SpatICS.power
-
-
-
-# # Bootstrap - mixing points to assess if SpatIS is significantly greater than zero
-# #             while keeping the roofing points
-# naleat <- 999#999
-# SpatIS_populat_obs_rand <- SpatIS.pop
-# SpatIS_indiv_obs_rand <- list()
-# SpatIS_indiv_obs_rand[[1]] <- SpatIS.ind
-# for(i in 1:naleat)
-# {
-#   print(i)
-#   spdados2 <- spdados.ud[,1][spdados$ID != "all",]
-#   
-#   home_size <- 60 # in meters
-#   lines <- which(sqrt((coordinates(spdados2)[,1] - 203441)**2) < home_size & sqrt((coordinates(spdados2)[,2] - 7567795)**2) < home_size)
-#   home <- spdados2[lines,]
-#   spdados2 <- spdados2[-lines,]
-#   
-#   indivs <- sample(spdados2$ID)
-#   spdados2$ID <- indivs
-#   spdados2 <- rbind(home, spdados2)
-# 
-#   pop <- spdados2
-#   pop$ID <- "all"
-#   spdados2 <- rbind(spdados2, pop)
-#   
-#   over <- kerneloverlap(spdados2[,1], grid = 100, extent = 1.5, method = "VI")
-#   population.line <- which(rownames(over) == "all")
-#   # Overlap of each individual with the whole population utilization distribution
-#   SpatIS.ind.aux <- over[-population.line,population.line]
-#   # Individual SpatIS = 1 - overlap of the individual with the population
-#   SpatIS.ind.aleat <- 1 - SpatIS.ind.aux
-#   SpatIS_indiv_obs_rand[[(i+1)]] <- SpatIS.ind.aleat
-#   # Population SpatIS = average of individual SpatIS
-#   SpatIS <- mean(SpatIS.ind.aleat)
-#   SpatIS_populat_obs_rand <- c(SpatIS_populat_obs_rand, SpatIS)
-# }
-# SpatIS_populat_obs_rand # unlist(lapply(SpatIS_indiv, mean)) # it is the same
-# SpatIS_indiv_obs_rand
-# 
-# # Save analysis data
-# save.image('spatis_aleat.RData')
-# 
-# observed <- SpatIS_indiv_obs_rand[[1]]
-# expected <- SpatIS_indiv_obs_rand[2:(naleat+1)]
-# expected.polled <- unlist(expected)
-# 
-# # significance
-# t.test(observed, expected.polled, alternative = 'greater', mu = 0, 
-#        var.equal = FALSE, conf.level = 0.95)
-# 
-# # Other ways of calculating significance
-# # install.packages('BSDA', dependencies = T)
-# # library(BSDA)
-# # z.test(observed, expected.polled, alternative = 'greater', mu = 0, 
-# #        sigma.x = sd(observed), sd(expected.polled), conf.level = 0.95)
-# 
-# # power analysis
-# t.power = function(obs, exp, alpha = 0.05){
-#   ts = lapply(X = exp, FUN = t.test, y = obs, alternative = 'less', mu = 0, 
-#                var.equal = FALSE, conf.level = 1-alpha)
-#   
-#   pval <- function(x) x$p.value
-#   tps <- unlist(lapply(ts, pval))
-# 
-#   sum(tps < .05) / length(tps)
-# }
-# t.power(obs = observed, exp = expected, alpha = 0.05)
-# 
-# # Sampling sufficiency
-# t.power.vs.n <- function(n, observed, expected, alpha = 0.05, n.repeat = 100) {
-#   
-#   power.val <- c()
-#   for(i in 1:n.repeat) {
-#     samp.obs <- sample(observed, n)
-#     samp.exp <- lapply(expected, sample, n)
-#     power.val <- c(power.val, t.power(samp.obs, samp.exp, alpha = alpha))
-#   }
-#   # list(power.val, mean(power.val))
-#   mean(power.val)
-# }
-# t.power.vs.n(3, observed = observed, expected = expected)
-# data.frame(2:length(observed), unlist(lapply(2:length(observed), t.power.vs.n, observed = observed, expected = expected)))
-
-# Other ways of calculating power
-# install.packages('pwr', dependencies = T)
-# library(pwr)
-# eff_size <- function(observed, expected.polled) {
-#   abs(mean(observed) - mean(expected.polled))/
-#     sqrt(((length(observed)-1)*var(observed) + (length(expected.polled)-1)*var(expected.polled))/(length(observed)+length(expected.polled)-2))
-# }
-# effect_size = eff_size(observed, expected.polled)
-# a <- pwr.t2n.test(n1 = length(observed), n2= length(expected.polled), d = effect_size, sig.level = 0.95)
-# a$power
-# 
-# t2n.power.vs.n <- function(n, observed, expected.pooled) {
-#   samp.obs <- sample(observed, n)
-#   samp.exp <- unlist(lapply(expected, sample, n))
-#   e.size <- eff_size(observed = samp.obs, expected.polled = samp.exp)
-#   pwr.t2n.test(n1 = length(samp.obs), n2= length(samp.exp), d = e.size, sig.level = 0.95)$power
-# }
-# t2n.power.vs.n(2, observed = observed, expected = expected.polled)
-# unlist(lapply(2:10, t2n.power.vs.n, observed = observed, expected = expected))
-# 
-# install.packages('asbio', dep = T)
-# library(asbio)
-# ?power.z.test
-# 
-# # P-value
-# (p <- sum(SpatIS.pop <= SpatIS_aleat_center)/(naleat+1)) # proportion of random values that are greater than the observed value
-# hist(SpatIS_aleat_center, main = "", xlab = "Spatial Individual Specialization", ylab = "Frequency",
-#      xlim = c(min(SpatIS_aleat_center), SpatIS.pop))
-# abline(v = SpatIS.pop, col = "red")
-# 
-# # Export
-# setwd(outputdir)
-# # png("p_value_SpatIS_random.png", width = 10, height = 10, units = "cm", res = 300)
-# tiff("p_value_SpatIS_random.tif", width = 10, height = 10, units = "cm", res = 300)
-# hist(SpatIS_aleat_center[-1], main = "", xlab = "Spatial Individual Specialization", ylab = "Frequency",
-#      xlim = c(min(SpatIS_aleat_center), SpatIS.pop), breaks = 20)
-# abline(v = SpatIS.pop, col = "red")
-# dev.off()
 
 ##########################################
 # 4)  Creating figure with results
@@ -1101,7 +956,7 @@ kern50
 mtext("B", 3, at = 199200, line = -3, cex = 1.5)
 
 plot(landuse.map, col = cols, border = cols, lwd = 0.1)
-points(spdados, pch = 20, col = cor[as.factor(spdados$ID)])
+points(spdados, pch = 20, col = cor[as.factor(spdados$Animal_ID)])
 plot(resource.areas, border = "red", lwd = 2, add = T)
 
 mtext("C", 3, at = 199200, line = -3, cex = 1.5)
