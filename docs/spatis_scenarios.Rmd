@@ -3,9 +3,10 @@ title: "Spatial Individual Specialization Indices applied to different contexts"
 author: Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. Individual specialization in the use of space by frugivorous bats. Journal of Animal Ecology.
 output:
   html_document:
-    df_print: paged
   pdf_document: default
 ---
+
+<link rel="stylesheet" href="styles.css" type="text/css">
 
 # Introduction
 
