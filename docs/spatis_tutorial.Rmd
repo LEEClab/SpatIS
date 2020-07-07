@@ -5,9 +5,11 @@ author: Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. Ind
   specialization in the use of space by frugivorous bats. Journal of Animal Ecology.
 output:
   html_document:
-    df_print: paged
   pdf_document: default
 ---
+
+
+<link rel="stylesheet" href="styles.css" type="text/css">
 
 # 1 Introduction
 

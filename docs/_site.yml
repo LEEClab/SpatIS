@@ -2,12 +2,13 @@ name: "Bernardo B. Niebuhr and Patricia Kerches-Rogeri"
 output_dir: "."
 navbar:
   title: "SpatIS: spatial individual specialization indices"
+  type: inverse
   left:
     #- text: "Documentation"
     - text: "SpatIS tutorial"
       href: spatis_tutorial.html
     - text: "SpatIS scenarios"
-      herf: spatis_scenarios.html
+      href: spatis_scenarios.html
   right:
     - icon: fa-envelope fa-lg
       href: https://github.com/LEEClab/SpatIS#contact
@@ -15,4 +16,5 @@ navbar:
       href: https://github.com/LEEClab/SpatIS
 output:
   html_document:
-    theme: 
+    theme: paper
+    css: "styles.css"
