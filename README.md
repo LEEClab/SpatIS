@@ -7,18 +7,21 @@ We present here the source code for running *SpatIS* and *SpatICS* using movemen
 ## Code
 
 The scripts in this repository are the following (look at the folder [code](https://github.com/LEEClab/SpatIS/tree/master/code)):
-- [spatis_source_code_v1_0.R](https://github.com/LEEClab/SpatIS/blob/master/code/spatis_source_code.R): source code with SpatIS and SpatIS_randomize R functions (details within the script)
-- [individual_specialization_space_use.R](https://github.com/LEEClab/SpatIS/blob/master/code/individual_specialization_space_use.R): script for spatial and individual specialization analyses from Kerches-Rogeri et al (*in review*).
-- [test_for_body_size_and_sex.R](https://github.com/LEEClab/SpatIS/blob/master/code/test_for_body_size_and_sex.R): script for testing for body size and sex effects on individual use of space
+- [spatis_source_code_v1_0.R](https://github.com/LEEClab/SpatIS/blob/master/code/spatis_source_code.R): source code with SpatIS and SpatIS_randomize R functions (details within the script);
+- [individual_specialization_space_use.R](https://github.com/LEEClab/SpatIS/blob/master/code/individual_specialization_space_use.R): script for spatial and individual specialization analyses from Kerches-Rogeri et al. (*in review*);
+- [test_for_body_size_and_sex.R](https://github.com/LEEClab/SpatIS/blob/master/code/test_for_body_size_and_sex.R): script for testing for body size and sex effects on individual use of space;
+- [use_foraging_areas_fruit_density.R](https://github.com/LEEClab/SpatIS/blob/master/code/use_foraging_areas_fruit_density.R): script for testing the effects of fruit density on the use of foraging areas y each individual;
 - spatis_tutorial (in [pdf](https://github.com/LEEClab/SpatIS/blob/master/spatis_tutorial/spatis_tutorial.pdf) and [Rmarkdown](https://github.com/LEEClab/SpatIS/blob/master/code/spatis_tutorial.Rmd) formats): Tutorial for applying SpatIS for other data sets. It may also be found [here](https://github.com/LEEClab/SpatIS/tree/master/spatis_tutorial).
-- scripts and pdf for the other supplementary material from Kerches-Rogeri et al. 
+- scripts and pdf for the other supplementary material from Kerches-Rogeri et al (*in review*). 
 
 ## Data
 
 We present here all the data used for analysis by Kerches-Rogeri et al (*in prep.*):
-- [bat_locations_ufscar_VHF.csv](https://github.com/LEEClab/SpatIS/blob/master/data/bat_locations_ufscar_VHF.csv): telemetry fixes for 11 individual bats monitored in Sao Carlos, SP, Brazil.
-- [test_for_bodysize_sex_polygons.csv](https://github.com/LEEClab/SpatIS/blob/master/data/test_for_bodysize_sex_polygons.csv): proportion of use of habitat polygons in the landscape by each individual.
-- [test_for_bodysize_sex_foraging_sites.csv](https://github.com/LEEClab/SpatIS/blob/master/data/test_for_bodysize_sex_foraging_sites.csv): proportion of use of foraging sites by each individual.
+- [spatis_paper_bat_positions.csv](https://github.com/LEEClab/SpatIS/blob/master/data/spatis_paper_bat_positions.csv): telemetry fixes for 11 individual bats monitored in Sao Carlos, SP, Brazil.
+- [spatis_paper_individual_bat_info.csv](https://github.com/LEEClab/SpatIS/blob/master/data/spatis_paper_individual_bat_info.csv): individual information for the tracked bats.
+- [proportion_use_landcover_polygons.csv](https://github.com/LEEClab/SpatIS/blob/master/data/proportion_use_landcover_polygons.csv): proportion of use of land cover polygons in the landscape by each individual.
+- [proportion_use_foraging_sites.csv](https://github.com/LEEClab/SpatIS/blob/master/data/proportion_use_foraging_sites.csv): proportion of use of foraging sites by each individual.
+- [use_foraging_areas_density_fruits.csv](https://github.com/LEEClab/SpatIS/blob/master/data/use_foraging_areas_density_fruits.csv): density of the main fruit genera consumed by bats in each foraging area.
 
 ## Citation
 
