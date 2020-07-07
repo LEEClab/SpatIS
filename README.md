@@ -1,6 +1,9 @@
 # SpatIS - Spatial Individual Specialization Indices
 
-This repository shares the code and details on the Spatial Individual Specialization Index (*SpatIS*) and the Spatis Individual Complementary Specialization Index (*SpatICS*). More information on how to run it for your data may be found [in this tutorial](https://github.com/LEEClab/SpatIS/tree/master/spatis_tutorial) and within the main article and supplementary information of the reference below (Kerches-Rogeri et al. *in review*). 
+This repository shares the code and details on the Spatial Individual Specialization Index (*SpatIS*) and the Spatis Individual Complementary Specialization Index (*SpatICS*). 
+
+For more information on how to run it for your data please look at the SpatIS website: https://leeclab.github.io/SpatIS/.  
+You will also find further information in the main article and supplementary information of the reference below (Kerches-Rogeri et al. *in review*). 
 
 We present here the source code for running *SpatIS* and *SpatICS* using movement data of individuals. We also show VHF movement data for the yellow–shouldered bats *Sturnira lilium* in Southeastern Brazil, an R script for analyzing this data using *SpatIS* and *SpatICS*, and other scripts and data used in Kerches-Rogeri et al (*in review*).
 
