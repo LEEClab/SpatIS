@@ -1,11 +1,12 @@
 ---
-title: 'Appendix S3. SpatIS tutorial: calculating Spatial Individual Specialization Indices'
-author: Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. Individual specialization in the use of space by frugivorous bats. Journal of Animal Ecology.
-output: 
+title: 'Appendix S3. SpatIS tutorial: calculating Spatial Individual Specialization
+  Indices'
+author: Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. Individual
+  specialization in the use of space by frugivorous bats. Journal of Animal Ecology.
+output:
+  html_document:
+    df_print: paged
   pdf_document: default
-  #github_document
-  # html_document: default
-  #   keep_md: true
 ---
 
 # 1 Introduction
