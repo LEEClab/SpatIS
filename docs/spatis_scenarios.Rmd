@@ -2,8 +2,7 @@
 title: "Spatial Individual Specialization Indices applied to different contexts"
 author: Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. Individual specialization in the use of space by frugivorous bats. Journal of Animal Ecology.
 output:
-  html_document:
-  pdf_document: default
+  html_document: default
 ---
 
 <link rel="stylesheet" href="styles.css" type="text/css">
@@ -179,7 +178,7 @@ for(i in 1:length(avg.specialist.low)) curve(dnorm(x, mean = avg.specialist.low[
                                                    sd = sd.specialist.low[i]), 
                                              from = -8, to = 8, add = T)
 curve(pop.curve(x, mn = avg.specialist.low, sd = sd.specialist.low), 
-      from = -8, ro = 8, lwd = 2, lty = 2, add = T, col = 2)
+      from = -8, to = 8, lwd = 2, lty = 2, add = T, col = 2)
 ```
 
 The populational values of the indexes are not so high (*SpatIS* = 0.52, *SpatICS* = 0.58) as for the case of a typical specialist population (section 1), but still indicate some degree of specialization in the population. This is clearer when one observes the individual values: there are some individuals that are highly specialized in some areas (maximum *SpatIS* = 0.85, max. *SpatICS* = 0.94), while others are generalists (minimum *SpatIS* = 0.36, min. *SpatICS* = 0.42). This means this population is composed of a mixture of specialist and generalist individuals, yet is predominantly a specialist population.

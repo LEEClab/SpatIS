@@ -474,9 +474,7 @@ for(i in 1:length(avg.specialist.low)) curve(dnorm(x, mean = avg.specialist.low[
                                                    sd = sd.specialist.low[i]), 
                                              from = -8, to = 8, add = T)
 curve(pop.curve(x, mn = avg.specialist.low, sd = sd.specialist.low), 
-      from = -8, ro = 8, lwd = 2, lty = 2, add = T, col = 2)</code></pre>
-<pre><code>## Warning in plot.xy(xy.coords(x, y), type = type, ...): &quot;ro&quot; is not a graphical
-## parameter</code></pre>
+      from = -8, to = 8, lwd = 2, lty = 2, add = T, col = 2)</code></pre>
 <p><img src="spatis_scenarios_files/figure-html/specialist_highvar_illustrate-1.png" width="672" /></p>
 <p>The populational values of the indexes are not so high (<em>SpatIS</em> = 0.52, <em>SpatICS</em> = 0.58) as for the case of a typical specialist population (section 1), but still indicate some degree of specialization in the population. This is clearer when one observes the individual values: there are some individuals that are highly specialized in some areas (maximum <em>SpatIS</em> = 0.85, max. <em>SpatICS</em> = 0.94), while others are generalists (minimum <em>SpatIS</em> = 0.36, min. <em>SpatICS</em> = 0.42). This means this population is composed of a mixture of specialist and generalist individuals, yet is predominantly a specialist population.</p>
 <pre class="r"><code># declare SpatIS function 
