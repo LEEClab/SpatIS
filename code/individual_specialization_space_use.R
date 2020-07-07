@@ -542,7 +542,7 @@ spdados.ud <- spdados[spdados$Animal_ID != 11,]
 spdados.ud <- spdados.ud[order(spdados.ud$Animal_ID),]
 
 # Save object
-saveRDS(spdados.ud, file = "code/bat_spdados.RDS")
+saveRDS(spdados.ud, file = "code/bat_spdados2.RDS")
 
 ##########################
 # Home range analysis

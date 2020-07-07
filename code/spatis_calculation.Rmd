@@ -2,9 +2,9 @@
 title: "Appendix S4. Methods to calculate the Spatial Individual Specialization Indices"
 author: Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. Individual specialization in the use of space by frugivorous bats. Journal of Animal Ecology.
 output:
-  pdf_document: default
   html_document:
     df_print: paged
+  pdf_document: default
 ---
 
 # 1 Introduction

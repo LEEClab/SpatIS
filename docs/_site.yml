@@ -1,0 +1,15 @@
+name: "Bernardo B. Niebuhr"
+output_dir: "."
+navbar:
+  title: "SpatIS: spatial individual specialization indices"
+  left:
+    - text: "Home"
+      href: index.html
+    #- text: "Documentation"
+    - text: "SpatIS tutorial"
+      href: spatis_tutorial.html
+    - text: "SpatIS scenarios"
+      herf: spatis_scenarios.html
+output:
+  html_document:
+    theme: jekyll-theme-minimald
