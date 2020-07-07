@@ -1,4 +1,4 @@
-# SpatIS - Spatial Individual Specialization Index
+# SpatIS - Spatial Individual Specialization Indices
 
 This repository shares the code and details on the Spatial Individual Specialization Index (*SpatIS*) and the Spatis Individual Complementary Specialization Index (*SpatICS*). More information on how to run it for your data may be found [in this tutorial](https://github.com/LEEClab/SpatIS/tree/master/spatis_tutorial) and within the main article and supplementary information of the reference below (Kerches-Rogeri et al. *in review*). 
 
