@@ -16,7 +16,7 @@ For the sake of simplicity, we assume that individual utilization distributions 
 
 Here we create four scenarios and calculate the individual and population *SpatIS* and *SpatICS* for them. The scenarios are: (i) specialist individuals with different UD means and low between-individual variation in UD width, (ii) generalist individuals with similar UD means and low variation in UD width, (iii) specialist individuals with different UD means and with high variation in UD width, and (iv) specialist individuals with similar UD means but high variation in UD width. 
 
-## 1 The typical specialist population: specialist individuals with different UD means and low variation in UD width
+# 1 The typical specialist population: specialist individuals with different UD means and low variation in UD width
 
 This scenario comprises individuals which are specialists in their most visited places (i.e. have different mean UD values) but do not present individual variation in their site fidelity - all individuals have UDs with similar SD, which are small compared to the populational UD standard deviation. Below we simulate and illustrate such a population. In this and all the examples along this appendix, the black lines represent the UD of the individuals and the red line the population UD.
 
@@ -81,7 +81,7 @@ sapply(avg.specialist.low, spatics)
 mean(sapply(avg.specialist.low, spatics))
 ```
 
-## 2 The typical generalist population: generalist individuals with similar UD means and low variation in UD width
+# 2 The typical generalist population: generalist individuals with similar UD means and low variation in UD width
 
 This scenario comprises individuals which are generalist in their most visited places (i.e. have mean UD values close to each other) and present very low site fidelity. All individuals have UDs with similar SD, which is large compared to the populational UD standard deviation. Below we simulate and illustrate such a population.
 
@@ -147,7 +147,7 @@ sapply(avg.specialist.low, spatics)
 mean(sapply(avg.specialist.low, spatics))
 ```
 
-## 3 In-between: individuals with different UD means and a varying degree of site fidelity
+# 3 In-between: individuals with different UD means and a varying degree of site fidelity
 
 This scenario comprises individuals which are specialists in their most visited places (i.e. have different mean UD values) but present a gradient of individual variation in their site fidelity - some individuals have UDs with small SD (high site fidelity), while others have UDs with high SD compared to the populational UD standard deviation (low side fidelity). Below we simulate and illustrate such a population.
 
@@ -215,7 +215,7 @@ mapply(spatics, avg.specialist.low, sd.specialist.low)
 mean(mapply(spatics, avg.specialist.low, sd.specialist.low))
 ```
 
-## 4 In-between: individuals with similar UD means but a varying degree of site fidelity
+# 4 In-between: individuals with similar UD means but a varying degree of site fidelity
 
 This scenario comprises individuals which are generalist in their most visited places (i.e. have mean UD values close to each other) but do present a gradient of individual variation in their site fidelity - some individuals have UDs with small SD (high site fidelity), while others have UDs with high SD compared to the populational UD standard deviation (low side fidelity). Below we simulate and illustrate such a population. 
 

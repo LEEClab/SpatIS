@@ -390,8 +390,9 @@ div.tocify {
 <p>To assess how general the measurements of <em>SpatIS</em> and <em>SpatICS</em> are for different contexts and populations, here we simulate populations in which individuals vary both in their most visited places and in their fidelity to those places. Doing that allows us to simulate both specialist and generalist populations, as well as vary the degree of individual specialization within the populations.</p>
 <p>For the sake of simplicity, we assume that individual utilization distributions (UDs) are one dimensional (<em>UD(x)</em> instead of <em>UD(x,y)</em>) and follow a Gaussian distribution. The mean of the UD represents the location (in x) of the most visited place for a given individual, while the standard deviation (SD) of the UD represents their site fidelity (low SD indicates high site fidelity).</p>
 <p>Here we create four scenarios and calculate the individual and population <em>SpatIS</em> and <em>SpatICS</em> for them. The scenarios are: (i) specialist individuals with different UD means and low between-individual variation in UD width, (ii) generalist individuals with similar UD means and low variation in UD width, (iii) specialist individuals with different UD means and with high variation in UD width, and (iv) specialist individuals with similar UD means but high variation in UD width.</p>
-<div id="the-typical-specialist-population-specialist-individuals-with-different-ud-means-and-low-variation-in-ud-width" class="section level2">
-<h2>1 The typical specialist population: specialist individuals with different UD means and low variation in UD width</h2>
+</div>
+<div id="the-typical-specialist-population-specialist-individuals-with-different-ud-means-and-low-variation-in-ud-width" class="section level1">
+<h1>1 The typical specialist population: specialist individuals with different UD means and low variation in UD width</h1>
 <p>This scenario comprises individuals which are specialists in their most visited places (i.e. have different mean UD values) but do not present individual variation in their site fidelity - all individuals have UDs with similar SD, which are small compared to the populational UD standard deviation. Below we simulate and illustrate such a population. In this and all the examples along this appendix, the black lines represent the UD of the individuals and the red line the population UD.</p>
 <pre class="r"><code># Specialist individuals, no SD variation
 
@@ -454,8 +455,8 @@ sapply(avg.specialist.low, spatics)</code></pre>
 mean(sapply(avg.specialist.low, spatics))</code></pre>
 <pre><code>## [1] 0.6884206</code></pre>
 </div>
-<div id="the-typical-generalist-population-generalist-individuals-with-similar-ud-means-and-low-variation-in-ud-width" class="section level2">
-<h2>2 The typical generalist population: generalist individuals with similar UD means and low variation in UD width</h2>
+<div id="the-typical-generalist-population-generalist-individuals-with-similar-ud-means-and-low-variation-in-ud-width" class="section level1">
+<h1>2 The typical generalist population: generalist individuals with similar UD means and low variation in UD width</h1>
 <p>This scenario comprises individuals which are generalist in their most visited places (i.e. have mean UD values close to each other) and present very low site fidelity. All individuals have UDs with similar SD, which is large compared to the populational UD standard deviation. Below we simulate and illustrate such a population.</p>
 <pre class="r"><code># Generalist individuals, no SD variation
 
@@ -519,8 +520,8 @@ sapply(avg.specialist.low, spatics)</code></pre>
 mean(sapply(avg.specialist.low, spatics))</code></pre>
 <pre><code>## [1] 0.08200431</code></pre>
 </div>
-<div id="in-between-individuals-with-different-ud-means-and-a-varying-degree-of-site-fidelity" class="section level2">
-<h2>3 In-between: individuals with different UD means and a varying degree of site fidelity</h2>
+<div id="in-between-individuals-with-different-ud-means-and-a-varying-degree-of-site-fidelity" class="section level1">
+<h1>3 In-between: individuals with different UD means and a varying degree of site fidelity</h1>
 <p>This scenario comprises individuals which are specialists in their most visited places (i.e. have different mean UD values) but present a gradient of individual variation in their site fidelity - some individuals have UDs with small SD (high site fidelity), while others have UDs with high SD compared to the populational UD standard deviation (low side fidelity). Below we simulate and illustrate such a population.</p>
 <pre class="r"><code># Specialist individuals, high interindividual SD variation
 
@@ -586,8 +587,8 @@ mapply(spatics, avg.specialist.low, sd.specialist.low)</code></pre>
 mean(mapply(spatics, avg.specialist.low, sd.specialist.low))</code></pre>
 <pre><code>## [1] 0.5750501</code></pre>
 </div>
-<div id="in-between-individuals-with-similar-ud-means-but-a-varying-degree-of-site-fidelity" class="section level2">
-<h2>4 In-between: individuals with similar UD means but a varying degree of site fidelity</h2>
+<div id="in-between-individuals-with-similar-ud-means-but-a-varying-degree-of-site-fidelity" class="section level1">
+<h1>4 In-between: individuals with similar UD means but a varying degree of site fidelity</h1>
 <p>This scenario comprises individuals which are generalist in their most visited places (i.e. have mean UD values close to each other) but do present a gradient of individual variation in their site fidelity - some individuals have UDs with small SD (high site fidelity), while others have UDs with high SD compared to the populational UD standard deviation (low side fidelity). Below we simulate and illustrate such a population.</p>
 <pre class="r"><code># Generalist individuals, high interindividual SD variation
 
@@ -653,7 +654,6 @@ mapply(spatics, avg.specialist.low, sd.specialist.low)</code></pre>
 <pre class="r"><code># populational value
 mean(mapply(spatics, avg.specialist.low, sd.specialist.low))</code></pre>
 <pre><code>## [1] 0.311358</code></pre>
-</div>
 </div>
 <div id="conclusion" class="section level1">
 <h1>Conclusion</h1>
