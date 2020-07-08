@@ -1,10 +1,10 @@
 ---
 title: 'SpatIS tutorial: calculating Spatial Individual Specialization
   Indices'
-author: Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. Individual
-  specialization in the use of space by frugivorous bats. Journal of Animal Ecology.
 output:
-  html_document: default
+  html_document: 
+    toc: TRUE
+    toc_float: TRUE
 ---
 
 <link rel="stylesheet" href="styles.css" type="text/css">
