@@ -5,6 +5,7 @@ output:
   html_document: 
     toc: TRUE
     toc_float: TRUE
+    css: styles.css
 ---
 
 <link rel="stylesheet" href="styles.css" type="text/css">

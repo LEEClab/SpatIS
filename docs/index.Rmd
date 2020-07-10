@@ -2,10 +2,9 @@
 title: "SpatIS - Spatial Individual Specialization Indices"
 author: "Bernardo B. Neibuhr and Patricia Kerches-Rogeri"
 output:
-  html_document: default
+  html_document: 
+    css: styles.css
 ---
-
-<link rel="stylesheet" href="styles.css" type="text/css">
 
 This page presents the Spatial Individual Specialization Index (*SpatIS*) and the Spatis Individual Complementary Specialization Index (*SpatICS*). The two indices were created to assess individual specialization in the use of space by animals and are implemented within R, with support of the packages `sp` and `adehabitatHR`.
 
