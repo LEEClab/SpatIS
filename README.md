@@ -5,7 +5,7 @@ This repository shares the code and details on the Spatial Individual Specializa
 For more information on how to run it for your data please look at the SpatIS website: https://leeclab.github.io/SpatIS/.  
 You will also find further information in the main article and supplementary information of the reference below (Kerches-Rogeri et al. *in review*). 
 
-We present here the source code for running *SpatIS* and *SpatICS* using movement data of individuals. We also show VHF movement data for the yellow–shouldered bats *Sturnira lilium* in Southeastern Brazil, an R script for analyzing this data using *SpatIS* and *SpatICS*, and other scripts and data used in Kerches-Rogeri et al (*in review*).
+We present here the source code for running *SpatIS* and *SpatICS* using movement data of individuals. We also show VHF movement data for the yellow–shouldered bats *Sturnira lilium* in Southeastern Brazil, an R script for analyzing this data using *SpatIS* and *SpatICS*, and other scripts and data used in Kerches-Rogeri et al (*2020*).
 
 ## Code
 
@@ -30,7 +30,7 @@ We present here all the data used for analysis by Kerches-Rogeri et al (*in prep
 
 If you use *SpatIS*, please refer to
 
-Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. Individual specialization in the space use of frugivorous bats. *In review*
+Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. Individual specialization in the space use of frugivorous bats. Journal of Animal Ecology.
 
 ## Contact
 
