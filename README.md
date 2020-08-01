@@ -32,6 +32,9 @@ If you use *SpatIS*, please refer to
 
 Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. 2020. Individual specialization in the space use of frugivorous bats. Journal of Animal Ecology.
 
+You can also cite this repository:
+[![DOI](https://zenodo.org/badge/95931986.svg)](https://zenodo.org/badge/latestdoi/95931986)
+
 ## Contact
 
 If you have questions or suggestions, do not hesitate to contact us (or open an issue [here](https://github.com/LEEClab/SpatIS/issues)):
