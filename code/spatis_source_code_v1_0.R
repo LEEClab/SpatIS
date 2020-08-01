@@ -4,59 +4,6 @@
 # 
 # Patricia K. Rogeri - pa_bio04@yahoo.com.br
 # Bernardo B. Niebuhr - bernardo_brandaum@yahoo.com.br
-# Renata L. Muylaert - renatamuy@gmail.com 
-#
-# Function SpatIS, to calculate Individual Specializations considering the use 
-#   of space. The function calculates utilization distributions (UD) for both 
-#   the individuals and the whole population, based on telemetry location points.
-#
-#   The individual SpatIS is calculated as the volume of the individual UD 
-#   (or a X% kernel area, X defined by the user) that do not overlap with the 
-#   populational UD (or a correspondent population kernel area).
-#
-# Call: SpatIS(data, individuals.col, population.ID = NULL, method, ...)
-#
-# Inputs:
-# data:            a SpatialPointsDataFrame object containing the locations of 
-#                  the individuals, their IDs, and other spatial or individual 
-#                  information.
-#
-# individuals.col: name(string) or number of the column of the input 
-#                  SpatialPointsDataFrame 'data' that represents the identity 
-#                  of individuals.
-#
-# population.ID:   ID (string or number) that represents the population in the
-#                  column 'individuals.col' of the input dataset 'data'. In case
-#                  the locations of all individuals were not pooled and combined
-#                  to the original data, population.ID is set to NULL (the default).
-#                  In this case, the calculations for the whole population are
-#                  made inside the SpatIS function.
-#
-# method:          method of overlap between utilization distributions (the same
-#                  options as the function kerneloverlap from adehabitatHR 
-#                  package. See ?kerneloverlap for more information). The default
-#                  is "VI", which computes the volume of the intersection between 
-#                  the individual and populational UD.
-# 
-# ...:             additional arguments passed to the functions kerneloverlap and
-#                  kernelUD, from the package adehabitatHR.
-#
-# Output:
-# A list of four elements:
-# data:              the data used to calculate SpatIS (with locations corresponding
-#                    to the whole population, independently of whether the population
-#                    locations were already in the input data). 
-#                    It is a SpatialPointsDataFrame.
-#
-# parms:             a list with parameters used as input to call SpatIS function.
-#
-# SpatIS.individual: a vector of Spatial individual specialization indices for
-#                    each individual of the population (the overlap between
-#                    each individual and the population UDs).
-#
-# SpatIS.population: a value of Spatial individual specialization for the population,
-#                    calculated as the average of all SpatIS individual values.
-#
 # July 2017
 #
 # License: GPLv2 (GNU General Public License v2.0)
@@ -99,7 +46,7 @@ spatis.calc <- function(over, method) {
 #'  (or a X% KDE area, X defined by the user) that do 
 #'  not overlap with the UD of the rest of the population, after excluding that individual  
 #'  (or a correspondent KDE area of the rest of the population).
-#'  The population SpatIS and SpatICS are are the average of the the individual
+#'  The population SpatIS and SpatICS are the average of the the individual
 #'  SpatIS and SpatICS values, averaged over all individuals.
 #' 
 #'  @param data a SpatialPointsDataFrame object containing the locations of
@@ -129,13 +76,33 @@ spatis.calc <- function(over, method) {
 #'  to calculate the overlap between UDs or to the function `adehabitat::kernelUD`` 
 #'  for the kernel estimation of the utilization distribution.
 #'  
+#'  @return SpatIS function returns a list of six elements:
+#'  \item{data}{the data used to calculate SpatIS (with locations corresponding
+#'     to the whole population, independently of whether the population
+#'     locations were already in the input data). It is a SpatialPointsDataFrame.}
+#'  \item{parms}{a list with parameters used as input to call SpatIS function.}
+#'  \item{SpatIS.individual}{} a vector of Spatial individual specialization indices for
+#'     each individual of the population (the overlap between
+#'     each individual and the population UDs).}
+#'  \item{SpatIS.population}{a value of Spatial individual specialization for the population,
+#'     calculated as the average of all SpatIS individual values.}
+#'  \item{SpatICS.individual}{a vector of Spatial individual complementary specialization
+#'     indices for each individual of the population (the overlap between
+#'     each individual and the population UDs).}
+#'  \item{SpatICS.population}{a value of Spatial individual complementary specialization
+#'     for the population, calculated as the average of all SpatICS individual values.}
+#'     for the population, calculated as the average of all SpatICS individual values.}
+#'     for the population, calculated as the average of all SpatICS individual values.}
+#'  
 #'  @author Bernardo B. Niebuhr <bernardo_brandaum@@yahoo.com.br> and Patricia Kerches-Rogeri
 #'  <parogeri@@gmail.com>.
 #'  
 #'  @references 
+#'  Kerches-Rogeri, P., Niebuhr, B.B., Muylaert, R.L, Mello, M.A.R.  Individual 
+#'  specialization in the space use of frugivorous bats. Journal of Animal Ecology.
 #'  
-#'  @seealso [kernelUD()] for the estimation of utilization distributions, and 
-#'  [kerneloverlap()] for the calculation of the overlap between utilization distributions or
+#'  @seealso [adehabitatHR::kernelUD()] for the estimation of utilization distributions, and 
+#'  [adehabitatHR::kerneloverlap()] for the calculation of the overlap between utilization distributions or
 #'  areas of use.
 SpatIS <- function(data, individuals.col, population.ID = NULL, index = c("spatis", "spatics"),
                    method = c("VI", "HR", "PHR", "BA", "UDOI")[1], ...)
