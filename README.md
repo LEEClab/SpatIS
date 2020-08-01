@@ -3,23 +3,23 @@
 This repository shares the code and details on the Spatial Individual Specialization Index (*SpatIS*) and the Spatis Individual Complementary Specialization Index (*SpatICS*). 
 
 For more information on how to run it for your data please look at the SpatIS website: https://leeclab.github.io/SpatIS/.  
-You will also find further information in the main article and supplementary information of the reference below (Kerches-Rogeri et al. *in review*). 
+You will also find further information in the main article and supplementary information of the reference below (Kerches-Rogeri et al. *2020*). 
 
 We present here the source code for running *SpatIS* and *SpatICS* using movement data of individuals. We also show VHF movement data for the yellow–shouldered bats *Sturnira lilium* in Southeastern Brazil, an R script for analyzing this data using *SpatIS* and *SpatICS*, and other scripts and data used in Kerches-Rogeri et al (*2020*).
 
 ## Code
 
 The scripts in this repository are the following (look at the folder [code](https://github.com/LEEClab/SpatIS/tree/master/code)):
-- [spatis_source_code_v1_0.R](https://github.com/LEEClab/SpatIS/blob/master/code/spatis_source_code.R): source code with SpatIS and SpatIS_randomize R functions (details within the script);
-- [individual_specialization_space_use.R](https://github.com/LEEClab/SpatIS/blob/master/code/individual_specialization_space_use.R): script for spatial and individual specialization analyses from Kerches-Rogeri et al. (*in review*);
-- [test_for_body_size_and_sex.R](https://github.com/LEEClab/SpatIS/blob/master/code/test_for_body_size_and_sex.R): script for testing for body size and sex effects on individual use of space;
+- [spatis_source_code_v1_0.R](https://github.com/LEEClab/SpatIS/blob/master/code/spatis_source_code_v1_0.R): source code with SpatIS and SpatIS_randomize R functions (details within the script); this is the main file for running *SpatIS* and *SpatICS*;
+- [individual_specialization_space_use.R](https://github.com/LEEClab/SpatIS/blob/master/code/individual_specialization_space_use.R): script for spatial and individual specialization analyses from Kerches-Rogeri et al. (*2020);
+- [test_for_body_size_and_sex.R](https://github.com/LEEClab/SpatIS/blob/master/code/test_for_body_size_and_sex.R): script for testing for body size and sex effects on individual use of space through binomial GLMs;
 - [use_foraging_areas_fruit_density.R](https://github.com/LEEClab/SpatIS/blob/master/code/use_foraging_areas_fruit_density.R): script for testing the effects of fruit density on the use of foraging areas y each individual;
 - spatis_tutorial (in [pdf](https://github.com/LEEClab/SpatIS/blob/master/spatis_tutorial/spatis_tutorial.pdf) and [Rmarkdown](https://github.com/LEEClab/SpatIS/blob/master/code/spatis_tutorial.Rmd) formats): Tutorial for applying SpatIS for other data sets. It may also be found [here](https://github.com/LEEClab/SpatIS/tree/master/spatis_tutorial).
-- scripts and pdf for the other supplementary material from Kerches-Rogeri et al (*in review*). 
+- scripts and pdf for the other supplementary material from Kerches-Rogeri et al (*2020*). 
 
 ## Data
 
-We present here all the data used for analysis by Kerches-Rogeri et al (*in prep.*):
+We present here all the data used for analysis by Kerches-Rogeri et al (*2020*):
 - [spatis_paper_bat_positions.csv](https://github.com/LEEClab/SpatIS/blob/master/data/spatis_paper_bat_positions.csv): telemetry fixes for 11 individual bats monitored in Sao Carlos, SP, Brazil.
 - [spatis_paper_individual_bat_info.csv](https://github.com/LEEClab/SpatIS/blob/master/data/spatis_paper_individual_bat_info.csv): individual information for the tracked bats.
 - [proportion_use_landcover_polygons.csv](https://github.com/LEEClab/SpatIS/blob/master/data/proportion_use_landcover_polygons.csv): proportion of use of land cover polygons in the landscape by each individual.
@@ -30,7 +30,7 @@ We present here all the data used for analysis by Kerches-Rogeri et al (*in prep
 
 If you use *SpatIS*, please refer to
 
-Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. Individual specialization in the space use of frugivorous bats. Journal of Animal Ecology.
+Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. 2020. Individual specialization in the space use of frugivorous bats. Journal of Animal Ecology.
 
 ## Contact
 
