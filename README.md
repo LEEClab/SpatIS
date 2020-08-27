@@ -30,9 +30,9 @@ We present here all the data used for analysis by Kerches-Rogeri et al (*2020*):
 
 If you use *SpatIS*, please refer to
 
-Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. 2020. Individual specialization in the space use of frugivorous bats. Journal of Animal Ecology.
+Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. 2020. Individual specialization in the use of space of frugivorous bats. Journal of Animal Ecology.
 
-You can also cite this repository:  
+You can also cite this repository, which contains both the code and data used in the publication:  
 Niebuhr, B. B.; Kerches-Rogeri P.; Muylaert, R. L., Mello, M. A. R. (2020). SpatIS: Spatial Individual Specialization Indices (Version v1.0). Zenodo.
 [![DOI](https://zenodo.org/badge/95931986.svg)](https://zenodo.org/badge/latestdoi/95931986)
 
