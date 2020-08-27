@@ -8,13 +8,16 @@ output:
 
 This page presents the Spatial Individual Specialization Index (*SpatIS*) and the Spatis Individual Complementary Specialization Index (*SpatICS*). The two indices were created to assess individual specialization in the use of space by animals and are implemented within R, with support of the packages `sp` and `adehabitatHR`.
 
-We present here the documentation of the R functions for running *SpatIS* and *SpatICS* using tracking data of individuals. We also present examples on how the indices work. They are based on the appendices of the paper by Kercher-Rogeri et al. (_in review_). You may find a direct link to the source code in the Github repository in th panel above.
+We present here the documentation of the R functions for running *SpatIS* and *SpatICS* using tracking data of individuals. We also present examples on how the indices work. They are based on the appendices of the paper by Kercher-Rogeri et al. (_2020_). You may find a direct link to the source code in the Github repository in the panel above.
 
 ## Citation
 
 If you use *SpatIS* and *SpatICS*, please refer to
 
-Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. Individual specialization in the space use of frugivorous bats. *In review*
+Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. 2020. Individual specialization in the use of space of frugivorous bats. Journal of Animal Ecology.
+
+You can also cite the Github repository, which contains both the code and data used in the publication:
+Niebuhr, B. B.; Kerches-Rogeri P.; Muylaert, R. L., Mello, M. A. R. (2020). SpatIS: Spatial Individual Specialization Indices (Version v1.0). Zenodo. DOI: 10.5281/zenodo.3969084.
 
 ## Contact
 
