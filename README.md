@@ -1,9 +1,9 @@
 # SpatIS - Spatial Individual Specialization Indices
 
-This repository shares the code and details on the Spatial Individual Specialization Index (*SpatIS*) and the Spatis Individual Complementary Specialization Index (*SpatICS*). 
+This repository shares the code and details on the Spatial Individual Specialization Index (*SpatIS*) and the Spatis Individual Complementary Specialization Index (*SpatICS*). Those two indices were developed and first presented in Kerches-Rogeri et al (2020, see reference below).
 
 For more information on how to run it for your data please look at the SpatIS website: https://leeclab.github.io/SpatIS/.  
-You will also find further information in the main article and supplementary information of the reference below (Kerches-Rogeri et al. *2020*). 
+You will also find further information in the main article and supplementary information of the reference below (Kerches-Rogeri et al. 2020). 
 
 We present here the source code for running *SpatIS* and *SpatICS* using movement data of individuals. We also show VHF movement data for the yellow–shouldered bats *Sturnira lilium* in Southeastern Brazil, an R script for analyzing this data using *SpatIS* and *SpatICS*, and other scripts and data used in Kerches-Rogeri et al (*2020*).
 
@@ -30,7 +30,7 @@ We present here all the data used for analysis by Kerches-Rogeri et al (*2020*):
 
 If you use *SpatIS*, please refer to
 
-Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. 2020. Individual specialization in the use of space of frugivorous bats. Journal of Animal Ecology.
+Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. 2020. [Individual specialization in the use of space of frugivorous bats](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/1365-2656.13339). Journal of Animal Ecology, *accepted*. DOI: 10.1111/1365-2656.13339.
 
 You can also cite this repository, which contains both the code and data used in the publication:  
 Niebuhr, B. B.; Kerches-Rogeri P.; Muylaert, R. L., Mello, M. A. R. (2020). SpatIS: Spatial Individual Specialization Indices (Version v1.0). Zenodo.
@@ -44,4 +44,4 @@ If you have questions or suggestions, do not hesitate to contact us (or open an 
 + Patricia Kerches-Rogeri <<parogeri@gmail.com>>  
 + Bernardo Brandão Niebuhr <<bernardo_brandaum@yahoo.com.br>>  
 + Renara L. Muylaert <<renatamuy@gmail.com>>  
-+ Marco A. R. Mello <<marmello@gmail.com>>
++ Marco A. R. Mello <<marmello@usp.br>>
