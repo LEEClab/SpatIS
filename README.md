@@ -37,6 +37,11 @@ Niebuhr, B. B.; Kerches-Rogeri P.; Muylaert, R. L., Mello, M. A. R. (2020). Spat
 
 The movement data of bats presented here may also be found and downloaded from [MoveBank](www.movebank.org), in the study ["Individual specialization in the use of space by frugivorous bats"](https://www.movebank.org/cms/webapp?gwt_fragment=page=studies,path=study577905925).
 
+# On the Media
+
+In Portuguese:  
+[Novo artigo sobre a relação entre dieta e o movimento de morcegos](https://marcomellolab.wordpress.com/2020/09/14/rogeri2020/#more-1976)
+
 ## Contact
 
 If you have questions or suggestions, do not hesitate to contact us (or open an issue [here](https://github.com/LEEClab/SpatIS/issues)):
