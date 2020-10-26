@@ -42,6 +42,8 @@ The movement data of bats presented here may also be found and downloaded from [
 In Portuguese:  
 [Novo artigo sobre a relação entre dieta e o movimento de morcegos](https://marcomellolab.wordpress.com/2020/09/14/rogeri2020/#more-1976)
 
+[Mesma espécie de morcegos, gosto diferente para comida: como isso pode impactar o ambiente?](https://jornal.usp.br/ciencias/mesma-especie-de-morcegos-gosto-diferente-para-comida-como-isso-pode-impactar-o-ambiente%E2%80%8B/)
+
 ## Contact
 
 If you have questions or suggestions, do not hesitate to contact us (or open an issue [here](https://github.com/LEEClab/SpatIS/issues)):
