@@ -29,7 +29,7 @@ We present here all the data used for analysis by Kerches-Rogeri et al (*2020*):
 
 If you use *SpatIS*, please refer to
 
-Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. 2020. [Individual specialization in the use of space of frugivorous bats](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/1365-2656.13339). Journal of Animal Ecology, *accepted*. DOI: 10.1111/1365-2656.13339.
+Kerches-Rogeri, P.; Niebuhr, B. B.; Muylaert, R. L., Mello, M. A. R. 2020. [Individual specialization in the use of space of frugivorous bats](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/1365-2656.13339). Journal of Animal Ecology. DOI: 10.1111/1365-2656.13339.
 
 You can also cite this repository, which contains both the code and data used in the publication:  
 Niebuhr, B. B.; Kerches-Rogeri P.; Muylaert, R. L., Mello, M. A. R. (2020). SpatIS: Spatial Individual Specialization Indices (Version v1.0). Zenodo.
@@ -49,5 +49,5 @@ In Portuguese:
 If you have questions or suggestions, do not hesitate to contact us (or open an issue [here](https://github.com/LEEClab/SpatIS/issues)):
 + Patricia Kerches-Rogeri <<parogeri@gmail.com>>  
 + Bernardo Brandão Niebuhr <<bernardo_brandaum@yahoo.com.br>>  
-+ Renara L. Muylaert <<renatamuy@gmail.com>>  
++ Renata L. Muylaert <<renatamuy@gmail.com>>  
 + Marco A. R. Mello <<marmello@usp.br>>
