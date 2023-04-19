@@ -1,6 +1,6 @@
 ---
 title: "SpatIS - Spatial Individual Specialization Indices"
-author: "Bernardo B. Neibuhr and Patricia Kerches-Rogeri"
+author: "Bernardo B. Niebuhr and Patricia Kerches-Rogeri"
 output:
   html_document: 
     css: styles.css
